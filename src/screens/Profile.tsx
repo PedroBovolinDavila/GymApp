@@ -18,24 +18,23 @@ export function Profile() {
         <Center mt={6} px={10}>
           {
             photoIsLoading ? (
-              <Skeleton 
-                w={33} 
-                h={33} 
-                rounded="full" 
+              <Skeleton
+                w={33}
+                h={33}
+                rounded="full"
                 startColor="gray.500"
                 endColor="gray.400"
               />
             ) : (
-              <UserPhoto 
+              <UserPhoto
                 source={{ uri: 'https://avatars.githubusercontent.com/u/118199084?v=4' }}
                 alt="Foto do usuario"
                 size={33}
               />
             )
           }
-
           <TouchableOpacity>
-            <Text 
+            <Text
               color="green.500"
               fontWeight="bold"
               fontSize="md"
@@ -45,20 +44,17 @@ export function Profile() {
               Alterar foto
             </Text>
           </TouchableOpacity>
-
-          <Input 
+          <Input
             bg="gray.600"
             placeholder="Nome"
           />
-
-          <Input 
+          <Input
             bg="gray.600"
             placeholder="E-mail"
             isDisabled
           />
         </Center>
-
-        <VStack 
+        <VStack
           px={10}
           mb={9}
           mt={12}
@@ -66,20 +62,18 @@ export function Profile() {
           <Heading color="gray.200" fontSize="md" mb={2}>
             Alterar senha
           </Heading>
-          
-          <Input 
+        
+          <Input
             bg="gray.600"
             placeholder="Senha antiga"
             secureTextEntry
           />
-
-          <Input 
+          <Input
             bg="gray.600"
             placeholder="Nova senha"
             secureTextEntry
           />
-
-          <Input 
+          <Input
             bg="gray.600"
             placeholder="Confirme a nova senha"
             secureTextEntry
