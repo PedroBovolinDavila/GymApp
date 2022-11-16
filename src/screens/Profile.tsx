@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { TouchableOpacity, Alert } from "react-native";
-import { Center, ScrollView, VStack, Skeleton, Text, Heading, useToast } from "native-base";
+import { Center, ScrollView, VStack, Skeleton, Text, Heading, useToast, Popover, Icon, HStack, Modal, IconButton } from "native-base";
+import { MaterialIcons } from '@expo/vector-icons'
 
 import * as ImagePicker from 'expo-image-picker'
 import * as FileSystem from 'expo-file-system'
@@ -11,46 +12,68 @@ import { Input } from "@components/Input";
 import { Button } from "@components/Button";
 
 export function Profile() {
+  const [modalIsOpen, setModalIsOpen] = useState(false)
   const [photoIsLoading, setPhotoIsLoading] = useState(false)
   const [userPhoto, setUserPhoto] = useState('https://avatars.githubusercontent.com/u/118199084?v=4')
 
   const toast = useToast()
 
-  async function handleSelectUserPhoto() {
+  async function handleSelectPhotoFromGallery() {
     try {
       setPhotoIsLoading(true)
 
-      const selectedPhoto = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        quality: 1,
-        aspect: [4, 4],
+      const userImage = await ImagePicker.launchImageLibraryAsync({
         allowsEditing: true,
-        
-      })
-  
-      if (selectedPhoto.cancelled) {
-        return 
+        aspect: [4, 4],
+        quality: 1,
+        mediaTypes: ImagePicker.MediaTypeOptions.Images
+      }) 
+
+      if (userImage.cancelled) {
+        return toast.show({
+          title: 'Você cancelou a seleção.',
+          bg: 'red.500',
+          placement: 'top'
+        })
       }
 
-      if (selectedPhoto.uri) {
-        const photoInfo = await FileSystem.getInfoAsync(selectedPhoto.uri)
-        
-        if (!photoInfo.size) {
-          return
-        }
+      if (userImage.uri) {
+        const imageInfo = await FileSystem.getInfoAsync(userImage.uri)
 
-        const photoSizeInMegabytes = photoInfo.size / 1024 / 1024
-        
-        if (photoSizeInMegabytes > 2) {
+        if (imageInfo.size && imageInfo.size / 1024 / 1024 > 5) {
           return toast.show({
-            title: 'Essa imagem é muito grande! Escolha uma menor que 5 megas.',
-            placement: 'top',
-            bg: 'red.500',
+            title: 'Escolha uma imagem menor que 5mb.',
+            color: 'red.500'
           })
         }
 
-        setUserPhoto(selectedPhoto.uri)
+        setUserPhoto(userImage.uri)
       }
+    } catch (err) {
+      console.log(err); 
+    } finally {
+      setPhotoIsLoading(false)
+    }
+  }
+
+  async function handleTakePicture() {
+    try {
+      setPhotoIsLoading(true)
+
+      const userImage = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        aspect: [4, 4],
+        quality: 1,
+        mediaTypes: ImagePicker.MediaTypeOptions.Images
+      }) 
+
+      if (userImage.cancelled) {
+        return toast.show({
+          title: 'Você cancelou a seleção.',
+        })
+      }
+
+      setUserPhoto(userImage.uri)
     } catch (err) {
       console.log(err);
     } finally {
@@ -81,7 +104,8 @@ export function Profile() {
               />
             )
           }
-          <TouchableOpacity onPress={handleSelectUserPhoto}>
+
+          <TouchableOpacity onPress={() => setModalIsOpen(true)}>
             <Text
               color="green.500"
               fontWeight="bold"
@@ -92,6 +116,45 @@ export function Profile() {
               Alterar foto
             </Text>
           </TouchableOpacity>
+
+          <Modal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)}>
+            <Modal.Content>
+              <Modal.Body bg="gray.400" borderColor="green.500" borderWidth={1} borderRadius="lg">
+                <HStack px={2} justifyContent="space-around">
+                  <VStack alignItems="center" justifyContent="center">
+                    <IconButton
+                      icon={<Icon as={MaterialIcons} name="add-photo-alternate"  />}
+                      _icon={{
+                        color: 'gray.100',
+                        size: "2xl"
+                      }}
+                      onPress={handleSelectPhotoFromGallery}
+                    />
+
+                    <Text color="gray.100" fontSize="sm">
+                      Galeria
+                    </Text>
+                  </VStack>
+
+                  <VStack alignItems="center" justifyContent="center">
+                    <IconButton
+                      icon={<Icon as={MaterialIcons} name="add-a-photo"  />}
+                      _icon={{
+                        color: 'gray.100',
+                        size: "2xl"
+                      }}
+                      onPress={handleTakePicture}
+                    />
+
+                    <Text color="gray.100" fontSize="sm">
+                      Camera
+                    </Text>
+                  </VStack>
+                </HStack>
+              </Modal.Body>
+            </Modal.Content>
+          </Modal>
+          
           <Input
             bg="gray.600"
             placeholder="Nome"
