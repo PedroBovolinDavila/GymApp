@@ -1,20 +1,42 @@
-import { Box, Heading, HStack, Icon, Image, Text, VStack } from "native-base";
+import { Box, Heading, HStack, Icon, Image, Text, useSafeArea, VStack } from "native-base";
 import { TouchableOpacity } from "react-native";
 import { Feather } from '@expo/vector-icons'
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { AppNavigatorRoutesProps } from "@routes/app.routes";
 
 import BodySvg from '@assets/body.svg'
 import SeriesSvg from '@assets/series.svg'
 import RepetitionsSvg from '@assets/repetitions.svg'
 import { Button } from "@components/Button";
+import { useCallback, useEffect, useState } from "react";
+import { getExerciseById } from "@storage/exercises/getExerciseById";
+import { Exercise as ExerciseType } from "@storage/types/exercise";
+
+type ExerciseParams = {
+  params: {
+    exerciseId: string
+  }
+}
 
 export function Exercise() {
+  const [exercise, setExercise] = useState<ExerciseType>()
+
   const navigation = useNavigation<AppNavigatorRoutesProps>()
+  const { params } = useRoute() as ExerciseParams
 
   function handleGoBack() {
     navigation.goBack()
   }
+
+  useFocusEffect(useCallback(() => {
+    async function fetchExercise() {
+      const exercise = await getExerciseById(params.exerciseId)
+
+      setExercise(exercise!)
+    }
+
+    fetchExercise()
+  }, [params.exerciseId]))
 
   return (
     <VStack flex={1}>
@@ -35,14 +57,14 @@ export function Exercise() {
           alignItems="center"
         >
           <Heading color="gray.100" fontSize="lg" flexShrink={1}>
-            Remada unilateral
+            {exercise?.name}
           </Heading>
 
           <HStack alignItems="center">
             <BodySvg />
 
             <Text color="gray.200" ml={1} textTransform="capitalize">
-              Costas
+              {exercise?.muscularGroup}
             </Text>
           </HStack>
         </HStack>
@@ -52,7 +74,7 @@ export function Exercise() {
         <Image 
           w="full"
           h={80}
-          source={{ uri: 'http://conteudo.imguol.com.br/c/entretenimento/0c/2019/12/03/remada-unilateral-com-halteres-1575402100538_v2_600x600.jpg' }}
+          source={{ uri: exercise?.image }}
           alt="Nome do exercicio"
           mb={3}
           resizeMode="cover"
@@ -69,14 +91,14 @@ export function Exercise() {
             <HStack>
               <SeriesSvg />
               <Text color="gray.200" ml={2}>
-                3 séries
+                {exercise?.series} séries
               </Text>
             </HStack>
 
             <HStack>
               <RepetitionsSvg />
               <Text color="gray.200" ml={2}>
-                12 repetições
+                {exercise?.repetitions} repetições
               </Text>
             </HStack>
           </HStack>

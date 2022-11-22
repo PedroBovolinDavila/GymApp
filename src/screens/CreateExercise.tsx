@@ -2,18 +2,28 @@ import { Button } from "@components/Button";
 import { Input } from "@components/Input";
 import { ScreenHeader } from "@components/ScreenHeader";
 import { UserPhoto } from "@components/UserPhoto";
-import { HStack, ScrollView, Skeleton, Text, useToast, VStack } from "native-base";
-import { useState } from "react";
+import { HStack, Modal, ScrollView, Skeleton, Text, useToast, VStack } from "native-base";
+import { useCallback, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { createExercise } from "@storage/exercises/createExercise";
+import { Select } from "@components/Select";
+import { useFocusEffect } from "@react-navigation/native";
+import { listGroups } from "@storage/groups/listGroups";
+import { Group } from "@storage/types/group";
+import { createGroup } from "@storage/groups/createGroup";
 
 export function CreateExercise() {
-  const [exerciseImage, setExerciseImage] = useState('')
+  //TODO: Adicionar React-hook-form aqui
   const [name, setName] = useState('')
   const [muscularGroup, setMuscularGroup] = useState('')
   const [series, setSeries] = useState('')
   const [repetitions, setRepetitions] = useState('')
+
+  const [exerciseImage, setExerciseImage] = useState('')
+  const [selectMuscularGroups, setSelectMuscularGroups] = useState<string[]>([])
+  const [newMuscularGroup, setNewMuscularGroup] = useState('')
+  const [modalIsOpen, setModalIsOpen] = useState(false)
   
   const toast = useToast()
 
@@ -63,18 +73,49 @@ export function CreateExercise() {
       repetitions
     })
 
-    setExerciseImage('')
-    setName('')
-    setMuscularGroup('')
-    setSeries('')
-    setRepetitions('')
-
     toast.show({
       title: 'Exercicio criado com sucesso!',
       placement: 'top',
       bg: 'green.500'
     })
+
+    setExerciseImage('')
+    setName('')
+    setMuscularGroup('')
+    setSeries('')
+    setRepetitions('')
   }
+
+  async function handleCreateGroup() {
+    if (!newMuscularGroup.trim()) {
+      return toast.show({
+        title: 'Informe todos os dados',
+        placement: 'top',
+        bg: 'red.500'
+      })
+    }    
+
+    await createGroup(newMuscularGroup)
+
+    toast.show({
+      title: 'Grupo criado com sucesso. Atualize a página',
+      placement: 'top',
+      bg: 'green.500'
+    })
+
+    setModalIsOpen(false)
+  }
+
+  useFocusEffect(useCallback(() => {
+    async function fetchGroups() {
+      const data = await listGroups()
+      const groups = data?.map(group => group.title)
+
+      setSelectMuscularGroups(groups!)
+    }
+
+    fetchGroups()
+  }, []))
 
   return (
     <VStack>
@@ -108,13 +149,37 @@ export function CreateExercise() {
               placeholder="Nome"
               onChangeText={setName}
               value={name}
-            />
-            <Input
-              bg="gray.600"
-              placeholder="Grupo muscular"
-              onChangeText={setMuscularGroup}
-              value={muscularGroup}              
-            />
+            />       
+           
+            <VStack mb={4} space={2}>
+              <Select 
+                bg="gray.600"
+                placeholder="Grupo muscular"
+                items={selectMuscularGroups}
+                onValueChange={value => setMuscularGroup(value)}
+                mb={0}
+              />
+
+              <TouchableOpacity onPress={() => setModalIsOpen(true)}>
+                <Text 
+                  color="green.500" 
+                  fontWeight="bold" 
+                  fontSize="xs"
+                >
+                  Adicionar grupo muscular
+                </Text>
+              </TouchableOpacity>
+            </VStack>
+
+            <Modal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)} p={8}>
+              <Modal.Content w="full" >
+                <Modal.Body bg="gray.400" borderRadius="lg" p={5}>
+                  <Input placeholder="Nome do grupo" onChangeText={setNewMuscularGroup} />
+                  <Button title="Adicionar" onPress={handleCreateGroup} />
+                </Modal.Body>
+              </Modal.Content>
+            </Modal>
+
             <HStack justifyContent="space-between">
               <Input
                 w="49%"
