@@ -11,12 +11,14 @@ import { Home } from "@screens/Home"
 import { History } from "@screens/History"
 import { Profile } from "@screens/Profile"
 import { Exercise } from "@screens/Exercise"
+import { CreateExercise } from '@screens/CreateExercise'
 
 type AppRoutes = {
   home: undefined
   history: undefined
   profile: undefined
   exercise: undefined
+  createExercise: undefined
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>
@@ -69,6 +71,14 @@ export function AppRoutes() {
           tabBarIcon: ({ color }) => (
             <ProfileSvg fill={color} width={iconSize} height={iconSize} />
           )
+        }}
+      />
+
+      <Screen 
+        name="createExercise"
+        component={CreateExercise}
+        options={{
+          tabBarButton: () => null
         }}
       />
 
