@@ -1,4 +1,4 @@
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { useCallback, useEffect, useState } from "react";
 import { FlatList, Heading, HStack, Icon, Text, VStack } from "native-base";
 import { AntDesign } from '@expo/vector-icons'
@@ -14,6 +14,7 @@ import { ExerciseCard } from "@components/ExerciseCard";
 import { listExercises } from "@storage/exercises/listExercises";
 import { listGroups } from "@storage/groups/listGroups";
 import { filterExerciseByGroup } from "@storage/exercises/filterExerciseByGroup";
+
 
 export function Home() {
   const [exercises, setExercises] = useState<Exercise[]>([])
@@ -50,6 +51,8 @@ export function Home() {
     fetchData()
   }, []))
 
+
+  
   return (
     <VStack flex={1}>
       <HomeHeader />
@@ -98,8 +101,8 @@ export function Home() {
         <FlatList 
           data={exercises}
           keyExtractor={item => item.id}
-          renderItem={({ item }) => (
-            <ExerciseCard exercise={item} onPress={() => handleOpenExerciseDetails(item.id)} />
+          renderItem={({ item }) => (       
+            <ExerciseCard exercise={item} onPress={() => handleOpenExerciseDetails(item.id)} /> 
           )}
 
           showsVerticalScrollIndicator={false}
@@ -107,7 +110,6 @@ export function Home() {
             paddingBottom: 10
           }}
         />
-
       </VStack>
     </VStack>
   )

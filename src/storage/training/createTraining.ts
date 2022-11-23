@@ -4,7 +4,12 @@ import uuid from 'react-native-uuid'
 import { findTrainingByTitle } from "./findTrainingByTitle";
 import { listTrainings } from "./listTrainings";
 
-export async function createTraining(title: string) {
+type CreateTrainingProps = {
+  title: string
+  exercisesIds: string[]
+}
+
+export async function createTraining({ title, exercisesIds }: CreateTrainingProps) {
   try {
 
     const trainingExists = await findTrainingByTitle(title)
@@ -16,7 +21,12 @@ export async function createTraining(title: string) {
     const prevTrainingList = await listTrainings()
     const id = uuid.v4()
 
-    const newTrainings = JSON.stringify([{ id, title }, ...prevTrainingList!])
+    const newTrainings = JSON.stringify([{
+      id,
+      title,
+      exercisesIds,
+      exercisesQuantity: exercisesIds.length
+    }, ...prevTrainingList!])
 
     await AsyncStorage.setItem(TRAINING_KEY, newTrainings)
 

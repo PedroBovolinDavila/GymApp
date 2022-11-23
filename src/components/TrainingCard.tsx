@@ -2,9 +2,12 @@ import { TouchableOpacity, TouchableOpacityProps } from "react-native";
 import { Entypo } from '@expo/vector-icons'
 import { Heading, HStack, Icon, Image, Text, VStack } from "native-base";
 
-type Props = TouchableOpacityProps & { }
+type Props = TouchableOpacityProps & {
+  trainingName: string
+  exercisesQuantity: number
+}
 
-export function TrainingCard({ ...rest }: Props) {
+export function TrainingCard({ exercisesQuantity, trainingName, ...rest }: Props) {
   return (
     <TouchableOpacity {...rest}>
       <HStack 
@@ -16,7 +19,9 @@ export function TrainingCard({ ...rest }: Props) {
         rounded="md" 
       >
         <VStack flex={1}>
-          <Heading fontSize="lg" color="white">Treino 1</Heading>
+          <Heading fontSize="lg" color="white">
+            {trainingName}
+          </Heading>
 
           <Text 
             fontSize="sm" 
@@ -24,7 +29,7 @@ export function TrainingCard({ ...rest }: Props) {
             mt={1}
             numberOfLines={2}
           >
-            5 exercícios
+            {exercisesQuantity} exercícios
           </Text>
         </VStack>
 

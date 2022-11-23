@@ -1,8 +1,7 @@
 import { Platform } from 'react-native'
 import { BottomTabNavigationProp, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import { MaterialIcons } from '@expo/vector-icons'
 
-import { Icon, useTheme } from "native-base"
+import { useTheme } from "native-base"
 
 import HomeSvg from '@assets/home.svg'
 import HistorySvg from '@assets/history.svg'
@@ -15,6 +14,7 @@ import { Profile } from "@screens/Profile"
 import { Exercise } from "@screens/Exercise"
 import { CreateExercise } from '@screens/CreateExercise'
 import { Workouts } from '@screens/Workouts'
+import { CreateTraining } from '@screens/CreateTraining'
 
 type AppRoutes = {
   home: undefined
@@ -23,6 +23,7 @@ type AppRoutes = {
   exercise: { exerciseId: string }
   createExercise: undefined
   workouts: undefined
+  createTraining: undefined
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>
@@ -99,6 +100,14 @@ export function AppRoutes() {
       <Screen 
         name="exercise"
         component={Exercise}
+        options={{
+          tabBarButton: () => null
+        }}
+      />
+
+      <Screen 
+        name="createTraining"
+        component={CreateTraining}
         options={{
           tabBarButton: () => null
         }}

@@ -1,38 +1,32 @@
 import { ScreenHeader } from "@components/ScreenHeader";
 import { TrainingCard } from "@components/TrainingCard";
 import { AntDesign } from '@expo/vector-icons'
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { AppNavigatorRoutesProps } from "@routes/app.routes";
+import { listTrainings } from "@storage/training/listTrainings";
+import { Training } from "@storage/types/training";
 import { FlatList, HStack, Icon, Text, VStack } from "native-base";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { TouchableOpacity } from "react-native";
 
 export function Workouts() {
-  const [training, setTraining] = useState([
-    {
-      id: '123',
-      title: 'treino 1',
-      exerciseQuantity: 5,
-    },
-    {
-      id: '1233',
-      title: 'treino 2',
-      exerciseQuantity: 10,
-    },
-    {
-      id: '1213',
-      title: 'treino 3',
-      exerciseQuantity: 40,
-    },
-    {
-      id: '1236',
-      title: 'treino 4',
-      exerciseQuantity: 10,
-    },
-    {
-      id: '1223',
-      title: 'treino 5',
-      exerciseQuantity: 2,
+  const [trainings, setTrainings] = useState<Training[]>()
+
+  const navigation = useNavigation<AppNavigatorRoutesProps>()
+
+  function handleOpenCreateTraining() {
+    navigation.navigate('createTraining')
+  }
+
+  useFocusEffect(useCallback(() => {
+    async function fetchTrainings() {
+      const trainings = await listTrainings()
+
+      setTrainings(trainings!)
     }
-  ])
+
+    fetchTrainings()
+  }, []))
 
   return (
     <VStack flex={1}>
@@ -40,8 +34,8 @@ export function Workouts() {
 
       <VStack px={8} pt={5}>
         <HStack justifyContent="space-between" alignItems="center" mb={5}>
-          <Text color="gray.200">Treinos criados: 5</Text>
-          <TouchableOpacity>
+          <Text color="gray.200">Treinos criados: {trainings?.length}</Text>
+          <TouchableOpacity onPress={handleOpenCreateTraining}>
             <Icon 
               as={AntDesign}
               name="pluscircleo"
@@ -52,10 +46,10 @@ export function Workouts() {
         </HStack>
 
         <FlatList 
-          data={training}
+          data={trainings}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
-            <TrainingCard />
+            <TrainingCard exercisesQuantity={item.exercisesQuantity} trainingName={item.title} />
           )}
           showsVerticalScrollIndicator={false}
         />

@@ -5,7 +5,10 @@ import {
 } from 'native-base'
 
 type SelectProps = NativeBaseSelectProps & { 
-  items: string[]
+  items: {
+    label: string,
+    value: string
+  }[]
 } 
 
 export function Select({ items, ...rest }: SelectProps) {
@@ -24,7 +27,7 @@ export function Select({ items, ...rest }: SelectProps) {
       {...rest}
     >
       {items.map(item => (
-        <NativeBaseSelect.Item label={item} value={item} key={item} />
+        <NativeBaseSelect.Item label={item.label} value={item.value} key={item.value} />
       ))}
     </NativeBaseSelect>
   ) 

@@ -13,6 +13,11 @@ import { listGroups } from "@storage/groups/listGroups";
 import { Group } from "@storage/types/group";
 import { createGroup } from "@storage/groups/createGroup";
 
+type Teste = {
+  label: string
+  value: string
+}
+
 export function CreateExercise() {
   //TODO: Adicionar React-hook-form aqui
   const [name, setName] = useState('')
@@ -21,7 +26,7 @@ export function CreateExercise() {
   const [repetitions, setRepetitions] = useState('')
 
   const [exerciseImage, setExerciseImage] = useState('')
-  const [selectMuscularGroups, setSelectMuscularGroups] = useState<string[]>([])
+  const [selectMuscularGroups, setSelectMuscularGroups] = useState<Teste[]>([])
   const [newMuscularGroup, setNewMuscularGroup] = useState('')
   const [modalIsOpen, setModalIsOpen] = useState(false)
   
@@ -109,9 +114,13 @@ export function CreateExercise() {
   useFocusEffect(useCallback(() => {
     async function fetchGroups() {
       const data = await listGroups()
-      const groups = data?.map(group => group.title)
 
-      setSelectMuscularGroups(groups!)
+      setSelectMuscularGroups(data?.map(group => (
+        {
+          label: group.title,
+          value: group.title
+        }
+      ))!)
     }
 
     fetchGroups()
