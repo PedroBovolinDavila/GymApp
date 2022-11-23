@@ -35,7 +35,7 @@ export function Home() {
 
     const exercises = await filterExerciseByGroup(group)
 
-    setExercises(exercises)
+    setExercises(exercises!)
   }
 
   useFocusEffect(useCallback(() => {
