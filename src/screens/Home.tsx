@@ -12,11 +12,13 @@ import { Group } from "@components/Group";
 import { HomeHeader } from "@components/HomeHeader";
 import { ExerciseCard } from "@components/ExerciseCard";
 import { listExercises } from "@storage/exercises/listExercises";
+import { listGroups } from "@storage/groups/listGroups";
+import { filterExerciseByGroup } from "@storage/exercises/filterExerciseByGroup";
 
 export function Home() {
   const [exercises, setExercises] = useState<Exercise[]>([])
-  const [groups, setGroups] = useState(['cOStA', 'oMbRO', 'BícEPs', 'tríceps']) 
-  const [groupSelected, setGroupSelected] = useState('Ombro')
+  const [groups, setGroups] = useState<string[]>([]) 
+  const [groupSelected, setGroupSelected] = useState('')
 
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
@@ -28,14 +30,24 @@ export function Home() {
     navigation.navigate('createExercise')
   }
 
+  async function handleSelectGroup(group: string) {
+    setGroupSelected(group)
+
+    const exercises = await filterExerciseByGroup(group)
+
+    setExercises(exercises)
+  }
+
   useFocusEffect(useCallback(() => {
-    async function fetchExercises() {
-      const exercises = await listExercises()      
+    async function fetchData() {
+      const exercises = await listExercises()   
+      const groups = await listGroups()   
       
+      setGroups(groups?.map(group => group.title)!)
       setExercises(exercises!)
     }
 
-    fetchExercises()
+    fetchData()
   }, []))
 
   return (
@@ -52,7 +64,7 @@ export function Home() {
           <Group 
             name={item} 
             isActive={groupSelected.toUpperCase() === item.toUpperCase()} 
-            onPress={() => setGroupSelected(item)}
+            onPress={() => handleSelectGroup(item)}
           />
         )}
 

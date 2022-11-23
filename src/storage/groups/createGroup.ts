@@ -10,7 +10,7 @@ export async function createGroup(title: string) {
     const groupExists = await findGroupByTitle(title)
 
     if (groupExists) {
-      throw new Error('Grupo já existe')
+      return
     }
 
     const prevGroupList = await listGroups()
