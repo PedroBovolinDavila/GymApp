@@ -5,9 +5,10 @@ import { Exercise } from "@storage/types/exercise";
 
 type Props = TouchableOpacityProps & {
   exercise: Exercise
+  withIcon?: boolean
 }
 
-export function ExerciseCard({ exercise, ...rest }: Props) {
+export function ExerciseCard({ withIcon = false, exercise, ...rest }: Props) {
   return (
     <TouchableOpacity {...rest}>
       <HStack 
@@ -29,7 +30,7 @@ export function ExerciseCard({ exercise, ...rest }: Props) {
         />
 
         <VStack flex={1}>
-          <Heading fontSize="lg" color="white">{exercise.name}</Heading>
+          <Heading fontSize="lg" color="white" numberOfLines={2}>{exercise.name}</Heading>
 
           <Text 
             fontSize="sm" 
@@ -41,11 +42,13 @@ export function ExerciseCard({ exercise, ...rest }: Props) {
           </Text>
         </VStack>
 
-        <Icon 
-          as={Entypo}
-          name="chevron-thin-right"
-          color="gray.300"
-        />
+        {withIcon && (
+          <Icon 
+            as={Entypo}
+            name="chevron-thin-right"
+            color="gray.300"
+          />
+        )}
       </HStack>
     </TouchableOpacity>
   )

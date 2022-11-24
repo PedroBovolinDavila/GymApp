@@ -18,6 +18,10 @@ export function Workouts() {
     navigation.navigate('createTraining')
   }
 
+  function handleOpenTrainingDetails(trainingId: string) {
+    navigation.navigate('trainingDetails', { trainingId })
+  }
+
   useFocusEffect(useCallback(() => {
     async function fetchTrainings() {
       const trainings = await listTrainings()
@@ -49,7 +53,11 @@ export function Workouts() {
           data={trainings}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
-            <TrainingCard exercisesQuantity={item.exercisesQuantity} trainingName={item.title} />
+            <TrainingCard 
+              exercisesQuantity={item.exercisesQuantity} 
+              trainingName={item.title} 
+              onPress={() => handleOpenTrainingDetails(item.id)} 
+            />
           )}
           showsVerticalScrollIndicator={false}
         />

@@ -15,6 +15,7 @@ import { Exercise } from "@screens/Exercise"
 import { CreateExercise } from '@screens/CreateExercise'
 import { Workouts } from '@screens/Workouts'
 import { CreateTraining } from '@screens/CreateTraining'
+import { TrainingDetails } from '@screens/TrainingDetails'
 
 type AppRoutes = {
   home: undefined
@@ -24,6 +25,7 @@ type AppRoutes = {
   createExercise: undefined
   workouts: undefined
   createTraining: undefined
+  trainingDetails: { trainingId: string }
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>
@@ -108,6 +110,14 @@ export function AppRoutes() {
       <Screen 
         name="createTraining"
         component={CreateTraining}
+        options={{
+          tabBarButton: () => null
+        }}
+      />
+
+      <Screen 
+        name="trainingDetails"
+        component={TrainingDetails}
         options={{
           tabBarButton: () => null
         }}

@@ -12,6 +12,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { listGroups } from "@storage/groups/listGroups";
 import { Group } from "@storage/types/group";
 import { createGroup } from "@storage/groups/createGroup";
+import { UserPhotoSkeleton } from "@components/skeletons/UserPhotoSkeleton";
 
 type Teste = {
   label: string
@@ -140,13 +141,7 @@ export function CreateExercise() {
                 size={32}
               />
             ) : (
-              <Skeleton
-                h={32}
-                w={32}
-                rounded="full"
-                startColor="gray.500"
-                endColor="gray.400"
-              />
+              <UserPhotoSkeleton size={32} />
             )}
             <TouchableOpacity onPress={handleSelectExerciseImage}>
               <Text color="green.500" fontWeight="bold" fontSize="md">Selecionar imagem</Text>

@@ -10,6 +10,7 @@ import { ScreenHeader } from "@components/ScreenHeader";
 import { UserPhoto } from "@components/UserPhoto";
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
+import { UserPhotoSkeleton } from "@components/skeletons/UserPhotoSkeleton";
 
 export function Profile() {
   const [modalIsOpen, setModalIsOpen] = useState(false)
@@ -88,15 +89,7 @@ export function Profile() {
       <ScrollView>
         <Center mt={6} px={10}>
           {
-            photoIsLoading ? (
-              <Skeleton
-                w={33}
-                h={33}
-                rounded="full"
-                startColor="gray.500"
-                endColor="gray.400"
-              />
-            ) : (
+            photoIsLoading ? <UserPhotoSkeleton size={33} /> : (
               <UserPhoto
                 source={{ uri: userPhoto }}
                 alt="Foto do usuario"
