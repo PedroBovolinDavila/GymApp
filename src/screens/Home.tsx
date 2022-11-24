@@ -14,6 +14,8 @@ import { ExerciseCard } from "@components/ExerciseCard";
 import { listExercises } from "@storage/exercises/listExercises";
 import { listGroups } from "@storage/groups/listGroups";
 import { filterExerciseByGroup } from "@storage/exercises/filterExerciseByGroup";
+import { ExerciseCardSkeleton } from "@components/skeletons/ExerciseCardSkeleton";
+import { GroupSkeleton } from "@components/skeletons/GroupSkeleton";
 
 
 export function Home() {
@@ -50,33 +52,39 @@ export function Home() {
 
     fetchData()
   }, []))
-
-
   
   return (
     <VStack flex={1}>
       <HomeHeader />
 
-      <FlatList 
-        data={groups}
-        keyExtractor={item => item}
-        showsHorizontalScrollIndicator={false}
-        horizontal
-  
-        renderItem={({ item }) => (
-          <Group 
-            name={item} 
-            isActive={groupSelected.toUpperCase() === item.toUpperCase()} 
-            onPress={() => handleSelectGroup(item)}
-          />
-        )}
+      {groups.length === 0 ? (
+        <HStack my={10} px={8}>
+          <GroupSkeleton />
+          <GroupSkeleton />
+          <GroupSkeleton />
+        </HStack>
+      ) : (
+        <FlatList 
+          data={groups}
+          keyExtractor={item => item}
+          showsHorizontalScrollIndicator={false}
+          horizontal
+    
+          renderItem={({ item }) => (
+            <Group 
+              name={item} 
+              isActive={groupSelected.toUpperCase() === item.toUpperCase()} 
+              onPress={() => handleSelectGroup(item)}
+            />
+          )}
 
-        my={10}
-        maxH={10}
-        _contentContainerStyle={{
-          px: 8
-        }}
-      />
+          my={10}
+          maxH={10}
+          _contentContainerStyle={{
+            px: 8
+          }}
+        />
+      )}
 
       <VStack flex={1} px={8}>
         <HStack justifyContent="space-between" mb={5}>
@@ -98,18 +106,26 @@ export function Home() {
           </TouchableOpacity>
         </HStack> 
 
-        <FlatList 
-          data={exercises}
-          keyExtractor={item => item.id}
-          renderItem={({ item }) => (       
-            <ExerciseCard exercise={item} onPress={() => handleOpenExerciseDetails(item.id)} withIcon /> 
-          )}
+        {exercises.length === 0 ? (
+          <VStack>
+            <ExerciseCardSkeleton />
+            <ExerciseCardSkeleton />
+            <ExerciseCardSkeleton />
+          </VStack>
+        ) :
+          <FlatList 
+            data={exercises}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) => (       
+              <ExerciseCard exercise={item} onPress={() => handleOpenExerciseDetails(item.id)} withIcon /> 
+            )}
 
-          showsVerticalScrollIndicator={false}
-          _contentContainerStyle={{
-            paddingBottom: 10
-          }}
-        />
+            showsVerticalScrollIndicator={false}
+            _contentContainerStyle={{
+              paddingBottom: 10
+            }}
+          />
+        }
       </VStack>
     </VStack>
   )
