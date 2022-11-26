@@ -71,13 +71,21 @@ export function CreateExercise() {
       })
     }
 
-    await createExercise({
+    const result = await createExercise({
       image: exerciseImage,
       name,
       muscularGroup,
       series,
       repetitions
     })
+
+    if (result instanceof Error) {
+      return toast.show({
+        title: 'Exercicio já existe',
+        placement: 'top',
+        bg: 'red.500'
+      })
+    }    
 
     toast.show({
       title: 'Exercicio criado com sucesso!',

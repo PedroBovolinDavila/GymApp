@@ -24,7 +24,7 @@ export async function createExercise({
     const exerciseExists = await getExerciseByName(name)
 
     if (exerciseExists) {
-      return
+      return new Error('teste')
     }
 
     const prevExerciseList = await listExercises()
@@ -40,6 +40,15 @@ export async function createExercise({
     }, ...prevExerciseList!])
 
     await AsyncStorage.setItem(EXERCISE_KEY, newExercises)
+
+    return {
+      id,
+      image,
+      name,
+      muscularGroup,
+      repetitions,
+      series
+    }
 
   } catch (err) {
     console.log(err);

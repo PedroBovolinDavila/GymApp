@@ -11,6 +11,7 @@ import { Button } from "@components/Button";
 import { useCallback, useEffect, useState } from "react";
 import { getExerciseById } from "@storage/exercises/getExerciseById";
 import { Exercise as ExerciseType } from "@storage/types/exercise";
+import { UserPhotoSkeleton } from "@components/skeletons/UserPhotoSkeleton";
 
 type ExerciseParams = {
   params: {
