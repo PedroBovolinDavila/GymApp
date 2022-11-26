@@ -15,7 +15,7 @@ export async function createTraining({ title, exercisesIds }: CreateTrainingProp
     const trainingExists = await findTrainingByTitle(title)
 
     if (trainingExists) {
-      return
+      return new Error('Nome já está em uso')
     }
 
     const prevTrainingList = await listTrainings()
@@ -29,6 +29,13 @@ export async function createTraining({ title, exercisesIds }: CreateTrainingProp
     }, ...prevTrainingList!])
 
     await AsyncStorage.setItem(TRAINING_KEY, newTrainings)
+
+    return {
+      id,
+      title,
+      exercisesIds,
+      exercisesQuantity: exercisesIds.length
+    }
 
   } catch (err) {
     console.log(err);

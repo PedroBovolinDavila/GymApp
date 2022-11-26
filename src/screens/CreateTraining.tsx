@@ -3,7 +3,7 @@ import { ScreenHeader } from "@components/ScreenHeader";
 import { Select } from "@components/Select";
 import { listExercises } from "@storage/exercises/listExercises";
 import { Exercise } from "@storage/types/exercise";
-import { Badge, Flex, Icon, Pressable, Text, VStack } from "native-base";
+import { Badge, Flex, Icon, Pressable, Text, useToast, VStack } from "native-base";
 import { useEffect, useState } from "react";
 import { FontAwesome5 } from '@expo/vector-icons'
 import { Button } from "@components/Button";
@@ -14,6 +14,8 @@ export function CreateTraining() {
   const [exercises, setExercises] = useState<Exercise[]>([])
   const [exercisesIds, setExercisesIds] = useState<string[]>([])
   const [exercisesNames, setExercisesNames] = useState<string[]>([])
+
+  const toast = useToast()
 
   const selectData = exercises?.map(exercise => (
     {
@@ -38,10 +40,36 @@ export function CreateTraining() {
   }
 
   async function handleCreateTraining() {
-    await createTraining({
+    if (!title.trim() || exercisesIds.length === 0) {
+      return toast.show({
+        title: 'Informe todos os dados',
+        placement: 'top',
+        bg: 'red.500'
+      })
+    }
+
+    const result = await createTraining({
       title, 
       exercisesIds
     })
+
+    if (result instanceof Error) {
+      return toast.show({
+        title: result.message,
+        placement: 'top',
+        bg: 'red.500'
+      })
+    }
+
+    toast.show({
+      title: 'Treino criado com sucesso',
+      placement: 'top',
+      bg: 'green.500'
+    })
+
+    setTitle('')
+    setExercisesIds([])
+    setExercisesNames([])
   }
 
   useEffect(() => {
@@ -63,6 +91,7 @@ export function CreateTraining() {
           bg="gray.600"
           placeholder="Nome"
           onChangeText={setTitle}
+          value={title}
         />   
 
         <Select 
