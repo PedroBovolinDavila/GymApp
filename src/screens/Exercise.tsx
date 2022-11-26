@@ -1,4 +1,4 @@
-import { Box, Heading, HStack, Icon, Image, Text, useSafeArea, VStack } from "native-base";
+import { Box, Heading, HStack, Icon, Image, Text, VStack } from "native-base";
 import { TouchableOpacity } from "react-native";
 import { Feather } from '@expo/vector-icons'
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
@@ -11,7 +11,8 @@ import { Button } from "@components/Button";
 import { useCallback, useEffect, useState } from "react";
 import { getExerciseById } from "@storage/exercises/getExerciseById";
 import { Exercise as ExerciseType } from "@storage/types/exercise";
-import { UserPhotoSkeleton } from "@components/skeletons/UserPhotoSkeleton";
+import { ExerciseImageSkeleton } from "@components/skeletons/ExerciseImageSkeleton";
+import { TextSkeleton } from "@components/skeletons/TextSkeleton";
 
 type ExerciseParams = {
   params: {
@@ -21,6 +22,7 @@ type ExerciseParams = {
 
 export function Exercise() {
   const [exercise, setExercise] = useState<ExerciseType>()
+  const [isLoading, setisLoading] = useState(false)
 
   const navigation = useNavigation<AppNavigatorRoutesProps>()
   const { params } = useRoute() as ExerciseParams
@@ -30,10 +32,13 @@ export function Exercise() {
   }
 
   useFocusEffect(useCallback(() => {
+    setisLoading(true)
+
     async function fetchExercise() {
       const exercise = await getExerciseById(params.exerciseId)
 
       setExercise(exercise!)
+      setisLoading(false)
     }
 
     fetchExercise()
@@ -57,30 +62,42 @@ export function Exercise() {
           mb={8} 
           alignItems="center"
         >
-          <Heading color="gray.100" fontSize="lg" flexShrink={1}>
-            {exercise?.name}
-          </Heading>
+          {isLoading ? (
+            <TextSkeleton size={40} />
+          ) : (
+            <Heading color="gray.100" fontSize="lg" flexShrink={1}>
+              {exercise?.name}
+            </Heading>
+          )}
 
           <HStack alignItems="center">
             <BodySvg />
 
-            <Text color="gray.200" ml={1} textTransform="capitalize">
-              {exercise?.muscularGroup}
-            </Text>
+            {isLoading ? (
+              <TextSkeleton size={20} />
+            ) : (
+              <Text color="gray.200" ml={1} textTransform="capitalize">
+                {exercise?.muscularGroup}
+              </Text>
+            )}
           </HStack>
         </HStack>
       </VStack>
 
       <VStack p={8}>
-        <Image 
-          w="full"
-          h={80}
-          source={{ uri: exercise?.image }}
-          alt="Nome do exercicio"
-          mb={3}
-          resizeMode="cover"
-          rounded="lg"
-        />
+        {isLoading ? (
+          <ExerciseImageSkeleton />
+        ) : (
+          <Image 
+            w="full"
+            h={80}
+            source={{ uri: exercise?.image }}
+            alt="Nome do exercicio"
+            mb={3}
+            resizeMode="cover"
+            rounded="lg"
+          />
+        )}
 
         <Box bg="gray.600" rounded="md" pb={4} px={4}>
           <HStack 
@@ -91,16 +108,26 @@ export function Exercise() {
           >
             <HStack>
               <SeriesSvg />
-              <Text color="gray.200" ml={2}>
-                {exercise?.series} séries
-              </Text>
+
+              {isLoading ? (
+                <TextSkeleton size={20} />
+              ) : (
+                <Text color="gray.200" ml={2}>
+                  {exercise?.series} séries
+                </Text>
+              )}
             </HStack>
 
             <HStack>
               <RepetitionsSvg />
-              <Text color="gray.200" ml={2}>
-                {exercise?.repetitions} repetições
-              </Text>
+
+              {isLoading ? (
+                <TextSkeleton size={20} />
+              ) : (
+                <Text color="gray.200" ml={2}>
+                  {exercise?.repetitions} repetições
+                </Text>
+              )}
             </HStack>
           </HStack>
 
