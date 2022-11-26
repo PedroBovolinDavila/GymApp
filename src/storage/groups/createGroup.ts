@@ -10,7 +10,7 @@ export async function createGroup(title: string) {
     const groupExists = await findGroupByTitle(title)
 
     if (groupExists) {
-      return
+      return new Error('Grupo já existe')
     }
 
     const prevGroupList = await listGroups()
@@ -19,6 +19,11 @@ export async function createGroup(title: string) {
     const newGroups = JSON.stringify([{ id, title }, ...prevGroupList!])
 
     await AsyncStorage.setItem(GROUP_KEY, newGroups)
+
+    return {
+      id,
+      title
+    }
 
   } catch (err) {
     console.log(err);

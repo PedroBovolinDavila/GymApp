@@ -109,7 +109,15 @@ export function CreateExercise() {
       })
     }    
 
-    await createGroup(newMuscularGroup)
+    const result = await createGroup(newMuscularGroup)
+
+    if (result instanceof Error) {
+      return toast.show({
+        title: 'Este grupo já existe',
+        placement: 'top',
+        bg: 'red.500'
+      }) 
+    }
 
     toast.show({
       title: 'Grupo criado com sucesso. Atualize a página',
