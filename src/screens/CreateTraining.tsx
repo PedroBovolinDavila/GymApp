@@ -102,8 +102,8 @@ export function CreateTraining() {
         />
 
         <Flex flexDir="row" flexWrap="wrap" my={8}>
-          {exercisesNames.map(exerciseName => (
-            <Pressable mr={0.5} mb={0.5} key={`${exerciseName}-${Math.random()}`} onPress={() => handleRemoveExercise(exerciseName)}>
+          {exercisesNames.map((exerciseName, index) => (
+            <Pressable mr={0.5} mb={0.5} key={`${exerciseName}-${index}`} onPress={() => handleRemoveExercise(exerciseName)}>
               <Badge 
                 rounded="sm"
                 bg="green.500" 

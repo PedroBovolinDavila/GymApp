@@ -46,11 +46,15 @@ export function TrainingDetails() {
       exercisesIds: training?.exercisesIds!
     })
 
+    setButtonText('Iniciar treino')
+
     toast.show({
       title: 'Treino finalizado com sucesso',
       placement: 'top',
       bg: 'green.500'
     })
+
+    navigation.navigate('history')
   }
 
   useFocusEffect(useCallback(() => {
@@ -127,7 +131,7 @@ export function TrainingDetails() {
         ) : (
           <FlatList 
             data={exercises}
-            keyExtractor={item => `${item.id}-${Math.random()}`}
+            keyExtractor={(item, index) => `${item.id}-${index}`}
             renderItem={({ item }) => (
               <Checkbox
                 value={item.id} 

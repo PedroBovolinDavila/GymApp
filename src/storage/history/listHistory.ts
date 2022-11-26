@@ -6,8 +6,6 @@ import { History } from '@storage/types/history';
 export async function listHistory() {
   try {
 
-    await AsyncStorage.removeItem(HISTORY_KEY)
-
     const storage = await AsyncStorage.getItem(HISTORY_KEY)
 
     const history: History[] = storage ? JSON.parse(storage) : []
