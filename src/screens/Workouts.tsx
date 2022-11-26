@@ -36,7 +36,7 @@ export function Workouts() {
     <VStack flex={1}>
       <ScreenHeader title="Treinos" />
 
-      <VStack px={8} pt={5}>
+      <VStack px={8} pt={5} flex={1}>
         <HStack justifyContent="space-between" alignItems="center" mb={5}>
           <Text color="gray.200">Treinos criados: {trainings?.length}</Text>
           <TouchableOpacity onPress={handleOpenCreateTraining}>

@@ -62,6 +62,7 @@ export function Home() {
           <GroupSkeleton />
           <GroupSkeleton />
           <GroupSkeleton />
+          <GroupSkeleton />
         </HStack>
       ) : (
         <FlatList 
@@ -108,6 +109,8 @@ export function Home() {
 
         {exercises.length === 0 ? (
           <VStack>
+            <ExerciseCardSkeleton />
+            <ExerciseCardSkeleton />
             <ExerciseCardSkeleton />
             <ExerciseCardSkeleton />
             <ExerciseCardSkeleton />

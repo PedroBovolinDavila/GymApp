@@ -21,6 +21,7 @@ type TrainingDetailsParams  = {
 export function TrainingDetails() {
   const [training, setTraining] = useState<Training>()
   const [exercises, setExercises] = useState<Exercise[]>()
+  const [buttonText, setButtonText] = useState('')
 
   const navigation = useNavigation<AppNavigatorRoutesProps>()
   const { params } = useRoute() as TrainingDetailsParams
@@ -29,20 +30,22 @@ export function TrainingDetails() {
     navigation.goBack()
   }
 
- 
+  function handleSetTraining() {
+    setButtonText('Finalizar treino')
+  }
 
   useFocusEffect(useCallback(() => {
-    async function fetchTraining() {
+    async function fetchData() {
       const training = await findTrainingById(params.trainingId)
       setTraining(training)
       
       const exercises = await listExercisesByIds(training?.exercisesIds!)
       setExercises(exercises!)
-      // console.log(exercises);
-      
+
+      setButtonText('Iniciar treino')
     }
 
-    fetchTraining()
+    fetchData()
   }, [params.trainingId]))
 
   return (
@@ -76,7 +79,13 @@ export function TrainingDetails() {
       </VStack>
 
       <VStack px={8} flex={1}>
-        <Group name="Finalizar treino" isActive={true} w="full" my={8} />
+        <Group 
+          name={buttonText} 
+          isActive={true} 
+          w="full" 
+          my={8} 
+          onPress={handleSetTraining}
+        />
 
         <FlatList 
           data={exercises}
@@ -99,9 +108,6 @@ export function TrainingDetails() {
             </Checkbox>
           )}
         />
-
-        {/* <Button title="Finalizar treino" mt={8} /> */}
-
       </VStack>
     </VStack>
   )

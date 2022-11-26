@@ -18,9 +18,14 @@ export function Group({ name, isActive, ...rest }: Props) {
       overflow="hidden"
 
       isPressed={isActive}
+
       _pressed={{
         borderColor: "green.500",
         borderWidth: 1
+      }}
+
+      _disabled={{
+        opacity: 60
       }}
 
       {...rest}
