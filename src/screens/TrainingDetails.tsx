@@ -1,18 +1,18 @@
-import { Checkbox, FlatList, Flex, Heading, HStack, Icon, Progress, ScrollView, Text, VStack } from "native-base";
+import { Checkbox, FlatList, Heading, HStack, Icon, Text, useToast, VStack } from "native-base";
 import { TouchableOpacity } from "react-native";
 import { Feather } from '@expo/vector-icons'
 import { AppNavigatorRoutesProps } from "@routes/app.routes";
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { ExerciseCard } from "@components/ExerciseCard";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { findTrainingById } from "@storage/training/findTrainingById";
 import {Training } from '@storage/types/training'
 import { Exercise } from "@storage/types/exercise";
 import { listExercisesByIds } from "@storage/exercises/listExercisesByIds";
-import { Button } from "@components/Button";
 import { Group } from "@components/Group";
 import { TextSkeleton } from "@components/skeletons/TextSkeleton";
 import { ExerciseCardSkeleton } from "@components/skeletons/ExerciseCardSkeleton";
+import { createHistory } from "@storage/history/createHistory";
 
 type TrainingDetailsParams  = {
   params: {
@@ -29,16 +29,33 @@ export function TrainingDetails() {
   const navigation = useNavigation<AppNavigatorRoutesProps>()
   const { params } = useRoute() as TrainingDetailsParams
 
+  const toast = useToast()
+
   function handleGoBack() {
     navigation.goBack()
   }
 
-  function handleSetTraining() {
-    setButtonText('Finalizar treino')
+  async function handleSetTraining() {
+    if (buttonText === 'Iniciar treino') {
+      setButtonText('Finalizar treino')
+      return
+    }
+
+    await createHistory({
+      date: new Date(),
+      exercisesIds: training?.exercisesIds!
+    })
+
+    toast.show({
+      title: 'Treino finalizado com sucesso',
+      placement: 'top',
+      bg: 'green.500'
+    })
   }
 
   useFocusEffect(useCallback(() => {
     setIsLoading(true)
+    setButtonText('Iniciar treino')
 
     async function fetchData() {
       const training = await findTrainingById(params.trainingId)

@@ -1,4 +1,4 @@
-import { Box, Heading, HStack, Icon, Image, Text, VStack } from "native-base";
+import { Box, Heading, HStack, Icon, Image, Text, useToast, VStack } from "native-base";
 import { TouchableOpacity } from "react-native";
 import { Feather } from '@expo/vector-icons'
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
@@ -13,6 +13,7 @@ import { getExerciseById } from "@storage/exercises/getExerciseById";
 import { Exercise as ExerciseType } from "@storage/types/exercise";
 import { ExerciseImageSkeleton } from "@components/skeletons/ExerciseImageSkeleton";
 import { TextSkeleton } from "@components/skeletons/TextSkeleton";
+import { createHistory } from "@storage/history/createHistory";
 
 type ExerciseParams = {
   params: {
@@ -27,8 +28,23 @@ export function Exercise() {
   const navigation = useNavigation<AppNavigatorRoutesProps>()
   const { params } = useRoute() as ExerciseParams
 
+  const toast = useToast()
+
   function handleGoBack() {
     navigation.goBack()
+  }
+
+  async function handleFinishExercise() {
+    await createHistory({ 
+      date: new Date(), 
+      exercisesIds: [exercise?.id!] 
+    })
+
+    toast.show({
+      title: 'Finalizado com sucesso',
+      bg: 'green.500',
+      placement: 'top'
+    })
   }
 
   useFocusEffect(useCallback(() => {
@@ -131,7 +147,7 @@ export function Exercise() {
             </HStack>
           </HStack>
 
-          <Button title="Marcar como realizada" />
+          <Button title="Marcar como realizada" onPress={handleFinishExercise} />
         </Box>
       </VStack>
     </VStack>

@@ -1,6 +1,14 @@
 import { Heading, HStack, Text, VStack } from "native-base";
 
-export function HistoryCard() {
+type HistoryCardProps = {
+  exercise: {
+    muscularGroup: string
+    name: string
+    hour: string
+  }
+}
+
+export function HistoryCard({ exercise }: HistoryCardProps) {
   return (
     <HStack
       w="full"
@@ -18,7 +26,7 @@ export function HistoryCard() {
           fontSize="lg" 
           textTransform="capitalize"
         >
-          Costas
+          {exercise.muscularGroup}
         </Heading>
 
         <Text 
@@ -26,11 +34,11 @@ export function HistoryCard() {
           fontSize="md"
           numberOfLines={1}
         >
-          Puxada frontal
+          {exercise.name}
         </Text>
       </VStack>
 
-      <Text color="gray.300" fontSize="md">08:55</Text>
+      <Text color="gray.300" fontSize="md">{exercise.hour}</Text>
     </HStack>
   )
 }
