@@ -1,4 +1,5 @@
 import { ScreenHeader } from "@components/ScreenHeader";
+import { ExerciseCardSkeleton } from "@components/skeletons/ExerciseCardSkeleton";
 import { TrainingCard } from "@components/TrainingCard";
 import { AntDesign } from '@expo/vector-icons'
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
@@ -11,6 +12,7 @@ import { TouchableOpacity } from "react-native";
 
 export function Workouts() {
   const [trainings, setTrainings] = useState<Training[]>()
+  const [isLoading, setIsLoading] = useState(false)
 
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
@@ -23,10 +25,13 @@ export function Workouts() {
   }
 
   useFocusEffect(useCallback(() => {
+    setIsLoading(true)
+
     async function fetchTrainings() {
       const trainings = await listTrainings()
 
       setTrainings(trainings!)
+      setIsLoading(false)
     }
 
     fetchTrainings()
@@ -49,18 +54,27 @@ export function Workouts() {
           </TouchableOpacity>
         </HStack>
 
-        <FlatList 
-          data={trainings}
-          keyExtractor={item => item.id}
-          renderItem={({ item }) => (
-            <TrainingCard 
-              exercisesQuantity={item.exercisesQuantity} 
-              trainingName={item.title} 
-              onPress={() => handleOpenTrainingDetails(item.id)} 
-            />
-          )}
-          showsVerticalScrollIndicator={false}
-        />
+        {isLoading ? (
+          <VStack>
+            <ExerciseCardSkeleton />
+            <ExerciseCardSkeleton />
+          </VStack>
+        ) : (
+          <FlatList 
+            data={trainings}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) => (
+              <TrainingCard 
+                exercisesQuantity={item.exercisesQuantity} 
+                trainingName={item.title} 
+                onPress={() => handleOpenTrainingDetails(item.id)} 
+              />
+            )}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
+
+       
       </VStack>
     </VStack>
   )

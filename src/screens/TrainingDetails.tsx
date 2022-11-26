@@ -11,6 +11,8 @@ import { Exercise } from "@storage/types/exercise";
 import { listExercisesByIds } from "@storage/exercises/listExercisesByIds";
 import { Button } from "@components/Button";
 import { Group } from "@components/Group";
+import { TextSkeleton } from "@components/skeletons/TextSkeleton";
+import { ExerciseCardSkeleton } from "@components/skeletons/ExerciseCardSkeleton";
 
 type TrainingDetailsParams  = {
   params: {
@@ -21,7 +23,8 @@ type TrainingDetailsParams  = {
 export function TrainingDetails() {
   const [training, setTraining] = useState<Training>()
   const [exercises, setExercises] = useState<Exercise[]>()
-  const [buttonText, setButtonText] = useState('')
+  const [buttonText, setButtonText] = useState('Iniciar treino')
+  const [isLoading, setIsLoading] = useState(false)
 
   const navigation = useNavigation<AppNavigatorRoutesProps>()
   const { params } = useRoute() as TrainingDetailsParams
@@ -35,6 +38,8 @@ export function TrainingDetails() {
   }
 
   useFocusEffect(useCallback(() => {
+    setIsLoading(true)
+
     async function fetchData() {
       const training = await findTrainingById(params.trainingId)
       setTraining(training)
@@ -42,7 +47,7 @@ export function TrainingDetails() {
       const exercises = await listExercisesByIds(training?.exercisesIds!)
       setExercises(exercises!)
 
-      setButtonText('Iniciar treino')
+      setIsLoading(false)
     }
 
     fetchData()
@@ -66,14 +71,23 @@ export function TrainingDetails() {
           mb={8} 
           alignItems="center"
         >
-          <Heading color="gray.100" fontSize="lg" flexShrink={1}>
-            {training?.title}
-          </Heading>
+          {isLoading ? (
+            <TextSkeleton size={40} />
+          ) : (
+            <Heading color="gray.100" fontSize="lg" flexShrink={1}>
+              {training?.title}
+            </Heading>
+          )}
+          
 
           <HStack alignItems="center">
-            <Text color="gray.200" ml={1} textTransform="capitalize">
-              {training?.exercisesQuantity} exercícios
-            </Text>
+            {isLoading ? (
+              <TextSkeleton size={20} />
+            ) : (
+              <Text color="gray.200" ml={1} textTransform="capitalize">
+                {training?.exercisesQuantity} exercícios
+              </Text>
+            )}
           </HStack>
         </HStack>
       </VStack>
@@ -87,27 +101,35 @@ export function TrainingDetails() {
           onPress={handleSetTraining}
         />
 
-        <FlatList 
-          data={exercises}
-          keyExtractor={item => `${item.id}-${Math.random()}`}
-          renderItem={({ item }) => (
-            <Checkbox
-              value={item.id} 
-              bg="gray.400" 
-              borderWidth={0}
-              size="md" 
+        {isLoading ? (
+          <VStack>
+            <ExerciseCardSkeleton />
+            <ExerciseCardSkeleton />
+            <ExerciseCardSkeleton />
+          </VStack>
+        ) : (
+          <FlatList 
+            data={exercises}
+            keyExtractor={item => `${item.id}-${Math.random()}`}
+            renderItem={({ item }) => (
+              <Checkbox
+                value={item.id} 
+                bg="gray.400" 
+                borderWidth={0}
+                size="md" 
 
-              _checked={{
-                bg: 'green.500'
-              }}
-              _pressed={{
-                bg: 'green.500'
-              }}
-            >
-              <ExerciseCard exercise={item} style={{ flex: 1 }} />
-            </Checkbox>
-          )}
-        />
+                _checked={{
+                  bg: 'green.500'
+                }}
+                _pressed={{
+                  bg: 'green.500'
+                }}
+              >
+                <ExerciseCard exercise={item} style={{ flex: 1 }} />
+              </Checkbox>
+            )}
+          />
+        )}        
       </VStack>
     </VStack>
   )
