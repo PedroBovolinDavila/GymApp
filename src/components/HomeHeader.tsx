@@ -3,8 +3,16 @@ import { MaterialIcons } from '@expo/vector-icons'
 
 import { UserPhoto } from "./UserPhoto";
 import { TouchableOpacity } from "react-native";
+import { useContext } from "react";
+import { AuthContext } from "@contexts/AuthContext";
 
 export function HomeHeader() {
+  const { setIsAuthenticated } = useContext(AuthContext)
+
+  function handleLogout() {
+    setIsAuthenticated(false)
+  }
+
   return (
     <HStack bg="gray.600" pt={16} pb={5} px={8} alignItems="center">
       <UserPhoto
@@ -24,7 +32,7 @@ export function HomeHeader() {
         </Heading>
       </VStack>
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleLogout}>
         <Icon 
           as={MaterialIcons}
           name="logout"
