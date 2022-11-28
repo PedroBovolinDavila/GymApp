@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TouchableOpacity, Alert } from "react-native";
 import { Center, ScrollView, VStack, Skeleton, Text, Heading, useToast, Popover, Icon, HStack, Modal, IconButton } from "native-base";
 import { MaterialIcons } from '@expo/vector-icons'
@@ -11,12 +11,13 @@ import { UserPhoto } from "@components/UserPhoto";
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
 import { UserPhotoSkeleton } from "@components/skeletons/UserPhotoSkeleton";
+import { AuthContext } from "@contexts/AuthContext";
 
 export function Profile() {
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [photoIsLoading, setPhotoIsLoading] = useState(false)
-  const [userPhoto, setUserPhoto] = useState('https://avatars.githubusercontent.com/u/118199084?v=4')
-
+  const [userPhoto, setUserPhoto] = useState('https://github.com/pedrobovolindavila.png')
+  
   const toast = useToast()
 
   async function handleSelectPhotoFromGallery() {

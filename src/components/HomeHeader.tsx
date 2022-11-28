@@ -5,6 +5,7 @@ import { UserPhoto } from "./UserPhoto";
 import { TouchableOpacity } from "react-native";
 import { useContext } from "react";
 import { AuthContext } from "@contexts/AuthContext";
+import { UserPhotoSkeleton } from "./skeletons/UserPhotoSkeleton";
 
 export function HomeHeader() {
   const { setIsAuthenticated } = useContext(AuthContext)
@@ -15,14 +16,14 @@ export function HomeHeader() {
 
   return (
     <HStack bg="gray.600" pt={16} pb={5} px={8} alignItems="center">
-      <UserPhoto
-        source={{ uri: 'https://avatars.githubusercontent.com/u/118199084?v=4' }}
-        size={16}
-        alt="Imagem do usuário"
-        mr={4}
-      />
+        <UserPhoto
+          source={{ uri: 'https://github.com/pedrobovolindavila.png' }}
+          size={16}
+          alt="Imagem do usuário"
+          
+        />
 
-      <VStack flex={1}>
+      <VStack flex={1} ml={4}>
         <Text color="gray.100" fontSize="md">
           Olá, 
         </Text>

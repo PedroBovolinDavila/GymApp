@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import { AuthNavigatorRoutesProps } from '@routes/auth.routes';
 
-import { VStack, Image, Text, Center, Heading, ScrollView, useToast } from "native-base";
+import { VStack, Image, Text, Center, Heading, ScrollView, useToast, Modal } from "native-base";
 
 import backgroundImg from '@assets/background.png'
 
@@ -15,6 +15,9 @@ import { AuthContext } from '@contexts/AuthContext';
 
 export function SignIn() {
   const [isBiometricSupported, setIsBiometricSupported] = useState(false)
+  const [modalIsOpen, setModalIsOpen] = useState(false)
+
+  const [name, setName] = useState('')
 
   const { setIsAuthenticated } = useContext(AuthContext)
 
@@ -38,7 +41,7 @@ export function SignIn() {
     }
 
     const auth = await LocalAuthentication.authenticateAsync()
-
+   
     if (!auth.success) {
       return toast.show({
         title: 'Biometria invalida, tente novamente',
@@ -126,6 +129,8 @@ export function SignIn() {
             />
           )}
         </Center>
+
+       
       </VStack>
     </ScrollView>
   )

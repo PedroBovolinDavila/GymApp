@@ -1,5 +1,5 @@
 import { TouchableOpacity, View } from "react-native";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { FlatList, Heading, HStack, Icon, Text, VStack } from "native-base";
 import { AntDesign } from '@expo/vector-icons'
 
@@ -16,6 +16,7 @@ import { listGroups } from "@storage/groups/listGroups";
 import { filterExerciseByGroup } from "@storage/exercises/filterExerciseByGroup";
 import { ExerciseCardSkeleton } from "@components/skeletons/ExerciseCardSkeleton";
 import { GroupSkeleton } from "@components/skeletons/GroupSkeleton";
+import { AuthContext } from "@contexts/AuthContext";
 
 
 export function Home() {
