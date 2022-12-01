@@ -1,14 +1,19 @@
-import { ScreenHeader } from "@components/ScreenHeader";
-import { ExerciseCardSkeleton } from "@components/skeletons/ExerciseCardSkeleton";
-import { TrainingCard } from "@components/TrainingCard";
-import { AntDesign } from '@expo/vector-icons'
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { AppNavigatorRoutesProps } from "@routes/app.routes";
-import { listTrainings } from "@storage/training/listTrainings";
-import { Training } from "@storage/types/training";
-import { FlatList, HStack, Icon, Text, VStack } from "native-base";
 import { useCallback, useState } from "react";
 import { TouchableOpacity } from "react-native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+
+import { AntDesign } from '@expo/vector-icons'
+
+import { FlatList, HStack, Icon, Text, VStack } from "native-base";
+
+import { AppNavigatorRoutesProps } from "@routes/app.routes";
+
+import { ScreenHeader } from "@components/ScreenHeader";
+import { TrainingCard } from "@components/TrainingCard";
+import { ExerciseCardSkeleton } from "@components/skeletons/ExerciseCardSkeleton";
+
+import { Training } from "@storage/types/training";
+import { listTrainings } from "@storage/training/listTrainings";
 
 export function Workouts() {
   const [trainings, setTrainings] = useState<Training[]>()

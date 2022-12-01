@@ -12,8 +12,8 @@ import { Home } from "@screens/Home"
 import { History } from "@screens/History"
 import { Profile } from "@screens/Profile"
 import { Exercise } from "@screens/Exercise"
-import { CreateExercise } from '@screens/CreateExercise'
 import { Workouts } from '@screens/Workouts'
+import { CreateExercise } from '@screens/CreateExercise'
 import { CreateTraining } from '@screens/CreateTraining'
 import { TrainingDetails } from '@screens/TrainingDetails'
 

@@ -1,17 +1,17 @@
-import { useContext, useEffect, useState } from "react";
-import { TouchableOpacity, Alert } from "react-native";
-import { Center, ScrollView, VStack, Skeleton, Text, Heading, useToast, Popover, Icon, HStack, Modal, IconButton } from "native-base";
-import { MaterialIcons } from '@expo/vector-icons'
+import { useState } from "react";
+import { TouchableOpacity } from "react-native";
 
 import * as ImagePicker from 'expo-image-picker'
 import * as FileSystem from 'expo-file-system'
+import { MaterialIcons } from '@expo/vector-icons'
 
-import { ScreenHeader } from "@components/ScreenHeader";
-import { UserPhoto } from "@components/UserPhoto";
+import { Center, ScrollView, VStack, Text, Heading, useToast, Icon, HStack, Modal, IconButton } from "native-base";
+
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
+import { UserPhoto } from "@components/UserPhoto";
+import { ScreenHeader } from "@components/ScreenHeader";
 import { UserPhotoSkeleton } from "@components/skeletons/UserPhotoSkeleton";
-import { AuthContext } from "@contexts/AuthContext";
 
 export function Profile() {
   const [modalIsOpen, setModalIsOpen] = useState(false)
@@ -155,7 +155,7 @@ export function Profile() {
           />
           <Input
             bg="gray.600"
-            placeholder="E-mail"
+            placeholder="Informe o seu email no registro"
             isDisabled
           />
         </Center>
@@ -184,7 +184,7 @@ export function Profile() {
             secureTextEntry
           />
 
-          <Button title="Atualizar" mt={4} />
+          <Button title="Atualizar" mt={4}  />
         </VStack>
       </ScrollView>
     </VStack>

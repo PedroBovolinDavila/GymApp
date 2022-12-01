@@ -4,7 +4,7 @@ import {
   Text
 } from "native-base"
 
-type Props = NativeBaseButtonProps & {
+type ButtonProps = NativeBaseButtonProps & {
   title: string
   variant?: 'solid' | 'outline'
 }
@@ -13,7 +13,7 @@ export function Button({
   title, 
   variant = 'solid', 
   ...rest 
-}: Props) {
+}: ButtonProps) {
   return (
     <NativeBaseButton
       w="full"

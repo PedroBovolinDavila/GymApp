@@ -1,23 +1,23 @@
-import { TouchableOpacity, View } from "react-native";
-import { useCallback, useContext, useEffect, useState } from "react";
-import { FlatList, Heading, HStack, Icon, Text, VStack } from "native-base";
+import { useCallback, useState } from "react";
+import { TouchableOpacity } from "react-native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+
 import { AntDesign } from '@expo/vector-icons'
 
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+import { FlatList, Heading, HStack, Icon, Text, VStack } from "native-base";
 
-import type { Exercise } from "@storage/types/exercise";
+import { AppNavigatorRoutesProps } from "@routes/app.routes";
 
 import { Group } from "@components/Group";
 import { HomeHeader } from "@components/HomeHeader";
 import { ExerciseCard } from "@components/ExerciseCard";
-import { listExercises } from "@storage/exercises/listExercises";
-import { listGroups } from "@storage/groups/listGroups";
-import { filterExerciseByGroup } from "@storage/exercises/filterExerciseByGroup";
-import { ExerciseCardSkeleton } from "@components/skeletons/ExerciseCardSkeleton";
 import { GroupSkeleton } from "@components/skeletons/GroupSkeleton";
-import { AuthContext } from "@contexts/AuthContext";
+import { ExerciseCardSkeleton } from "@components/skeletons/ExerciseCardSkeleton";
 
+import { Exercise } from "@storage/types/exercise";
+import { listGroups } from "@storage/groups/listGroups";
+import { listExercises } from "@storage/exercises/listExercises";
+import { filterExerciseByGroup } from "@storage/exercises/filterExerciseByGroup";
 
 export function Home() {
   const [exercises, setExercises] = useState<Exercise[]>([])

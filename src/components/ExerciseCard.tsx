@@ -1,14 +1,16 @@
 import { TouchableOpacity, TouchableOpacityProps, View } from "react-native";
 import { Entypo } from '@expo/vector-icons'
+
 import { Heading, HStack, Icon, Image, Text, VStack } from "native-base";
+
 import { Exercise } from "@storage/types/exercise";
 
-type Props = TouchableOpacityProps & {
+type ExerciseCardProps = TouchableOpacityProps & {
   exercise: Exercise
   withIcon?: boolean
 }
 
-export function ExerciseCard({ withIcon = false, exercise, ...rest }: Props) {
+export function ExerciseCard({ withIcon = false, exercise, ...rest }: ExerciseCardProps) {
   return (
     <TouchableOpacity {...rest}>
       <HStack 

@@ -1,12 +1,16 @@
-import { Input } from "@components/Input";
-import { ScreenHeader } from "@components/ScreenHeader";
-import { Select } from "@components/Select";
-import { listExercises } from "@storage/exercises/listExercises";
-import { Exercise } from "@storage/types/exercise";
-import { Badge, Flex, Icon, Pressable, Text, useToast, VStack } from "native-base";
 import { useEffect, useState } from "react";
+
 import { FontAwesome5 } from '@expo/vector-icons'
+
+import { Badge, Flex, Icon, Pressable, Text, useToast, VStack } from "native-base";
+
+import { Input } from "@components/Input";
+import { Select } from "@components/Select";
 import { Button } from "@components/Button";
+import { ScreenHeader } from "@components/ScreenHeader";
+
+import { Exercise } from "@storage/types/exercise";
+import { listExercises } from "@storage/exercises/listExercises";
 import { createTraining } from "@storage/training/createTraining";
 
 export function CreateTraining() {

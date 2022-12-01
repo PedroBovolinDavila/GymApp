@@ -1,13 +1,13 @@
-import { useNavigation } from '@react-navigation/native'
 import { useForm, Controller } from 'react-hook-form'
+import { useNavigation } from '@react-navigation/native'
 
 import { VStack, Image, Text, Center, Heading, ScrollView } from "native-base";
 
-import backgroundImg from '@assets/background.png'
-
-import LogoSvg from '@assets/logo.svg'
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
+
+import backgroundImg from '@assets/background.png'
+import LogoSvg from '@assets/logo.svg'
 
 type SignUpFormInputs = {
   name: string

@@ -1,11 +1,11 @@
 import { Text, Pressable, IPressableProps } from 'native-base'
 
-type Props = IPressableProps & {
+type GroupProps = IPressableProps & {
   name: string
   isActive: boolean
 }
 
-export function Group({ name, isActive, ...rest }: Props) {
+export function Group({ name, isActive, ...rest }: GroupProps) {
   return (
     <Pressable 
       mr={3}

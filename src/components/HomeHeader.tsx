@@ -1,28 +1,19 @@
-import { Heading, HStack, Icon, Text, VStack } from "native-base";
+import { TouchableOpacity } from "react-native";
 import { MaterialIcons } from '@expo/vector-icons'
 
+import { Heading, HStack, Icon, Text, VStack } from "native-base";
+
 import { UserPhoto } from "./UserPhoto";
-import { TouchableOpacity } from "react-native";
-import { useContext } from "react";
-import { AuthContext } from "@contexts/AuthContext";
-import { UserPhotoSkeleton } from "./skeletons/UserPhotoSkeleton";
 
 export function HomeHeader() {
-  const { setIsAuthenticated } = useContext(AuthContext)
-
-  function handleLogout() {
-    setIsAuthenticated(false)
-  }
-
   return (
     <HStack bg="gray.600" pt={16} pb={5} px={8} alignItems="center">
-        <UserPhoto
-          source={{ uri: 'https://github.com/pedrobovolindavila.png' }}
-          size={16}
-          alt="Imagem do usuário"
-          
-        />
-
+      <UserPhoto
+        source={{ uri: 'https://github.com/pedrobovolindavila' }}
+        size={16}
+        alt="Imagem do usuário"
+      />
+      
       <VStack flex={1} ml={4}>
         <Text color="gray.100" fontSize="md">
           Olá, 
@@ -33,7 +24,7 @@ export function HomeHeader() {
         </Heading>
       </VStack>
 
-      <TouchableOpacity onPress={handleLogout}>
+      <TouchableOpacity>
         <Icon 
           as={MaterialIcons}
           name="logout"

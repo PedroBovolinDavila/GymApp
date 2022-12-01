@@ -1,67 +1,21 @@
 import { useNavigation } from '@react-navigation/native'
+
+import { VStack, Image, Text, Center, Heading, ScrollView } from "native-base";
+
 import { AuthNavigatorRoutesProps } from '@routes/auth.routes';
 
-import { VStack, Image, Text, Center, Heading, ScrollView, useToast, Modal } from "native-base";
-
-import backgroundImg from '@assets/background.png'
-
-import LogoSvg from '@assets/logo.svg'
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
 
-import * as LocalAuthentication from 'expo-local-authentication'
-import { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '@contexts/AuthContext';
+import LogoSvg from '@assets/logo.svg'
+import backgroundImg from '@assets/background.png'
 
 export function SignIn() {
-  const [isBiometricSupported, setIsBiometricSupported] = useState(false)
-  const [modalIsOpen, setModalIsOpen] = useState(false)
-
-  const [name, setName] = useState('')
-
-  const { setIsAuthenticated } = useContext(AuthContext)
-
   const navigation = useNavigation<AuthNavigatorRoutesProps>()
-
-  const toast = useToast()
 
   function handleNewAccount() {
     navigation.navigate('SignUp')
   }
-
-  async function handleLoginWithBiometric() {
-    const savedBiometrics = await LocalAuthentication.isEnrolledAsync()
-
-    if (!savedBiometrics) {
-      return toast.show({
-        title: 'Você não tem biometrias cadastradas',
-        placement: 'top',
-        bg: 'red.500'
-      })
-    }
-
-    const auth = await LocalAuthentication.authenticateAsync()
-   
-    if (!auth.success) {
-      return toast.show({
-        title: 'Biometria invalida, tente novamente',
-        placement: 'top',
-        bg: 'red.500'
-      })
-    }    
-
-    setIsAuthenticated(true)
-  }
-
-  useEffect(() => {
-    async function verifyBiometrics() {
-      const compatible = await LocalAuthentication.hasHardwareAsync()
-
-      setIsBiometricSupported(compatible)
-    } 
-
-    verifyBiometrics()
-  }, [])
 
   return (
     <ScrollView 
@@ -121,13 +75,7 @@ export function SignIn() {
             mb={3}
           />
 
-          {isBiometricSupported && (
-            <Button 
-              title="Ultilizar digital" 
-              variant="outline" 
-              onPress={handleLoginWithBiometric}
-            />
-          )}
+         
         </Center>
 
        

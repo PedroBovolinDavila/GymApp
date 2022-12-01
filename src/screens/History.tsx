@@ -1,11 +1,12 @@
-import { Center, Heading, SectionList, Text, VStack } from "native-base";
+import { useCallback, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+
+import { Heading, SectionList, Text, VStack } from "native-base";
 
 import { HistoryCard } from "@components/HistoryCard";
 import { ScreenHeader } from "@components/ScreenHeader";
-import { useCallback, useState } from "react";
-import { useFocusEffect } from "@react-navigation/native";
+
 import { listHistory } from "@storage/history/listHistory";
-import { Exercise } from "@storage/types/exercise";
 import { History as HistoryType } from "@storage/types/history";
 
 export function History() {

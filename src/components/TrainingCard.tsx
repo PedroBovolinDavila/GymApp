@@ -1,13 +1,14 @@
 import { TouchableOpacity, TouchableOpacityProps } from "react-native";
 import { Entypo } from '@expo/vector-icons'
-import { Heading, HStack, Icon, Image, Text, VStack } from "native-base";
 
-type Props = TouchableOpacityProps & {
+import { Heading, HStack, Icon, Text, VStack } from "native-base";
+
+type TrainingCardProps = TouchableOpacityProps & {
   trainingName: string
   exercisesQuantity: number
 }
 
-export function TrainingCard({ exercisesQuantity, trainingName, ...rest }: Props) {
+export function TrainingCard({ exercisesQuantity, trainingName, ...rest }: TrainingCardProps) {
   return (
     <TouchableOpacity {...rest}>
       <HStack 

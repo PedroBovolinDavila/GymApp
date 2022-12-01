@@ -1,18 +1,21 @@
-import { Button } from "@components/Button";
-import { Input } from "@components/Input";
-import { ScreenHeader } from "@components/ScreenHeader";
-import { UserPhoto } from "@components/UserPhoto";
-import { HStack, Modal, ScrollView, Skeleton, Text, useToast, VStack } from "native-base";
 import { useCallback, useState } from "react";
 import { TouchableOpacity } from "react-native";
-import * as ImagePicker from 'expo-image-picker';
-import { createExercise } from "@storage/exercises/createExercise";
-import { Select } from "@components/Select";
 import { useFocusEffect } from "@react-navigation/native";
-import { listGroups } from "@storage/groups/listGroups";
-import { Group } from "@storage/types/group";
-import { createGroup } from "@storage/groups/createGroup";
+
+import * as ImagePicker from 'expo-image-picker';
+
+import { HStack, Modal, ScrollView, Text, useToast, VStack } from "native-base";
+
+import { Input } from "@components/Input";
+import { Select } from "@components/Select";
+import { Button } from "@components/Button";
+import { UserPhoto } from "@components/UserPhoto";
+import { ScreenHeader } from "@components/ScreenHeader";
 import { UserPhotoSkeleton } from "@components/skeletons/UserPhotoSkeleton";
+
+import { listGroups } from "@storage/groups/listGroups";
+import { createGroup } from "@storage/groups/createGroup";
+import { createExercise } from "@storage/exercises/createExercise";
 
 type Teste = {
   label: string

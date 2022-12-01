@@ -1,19 +1,24 @@
-import { Box, Heading, HStack, Icon, Image, Text, useToast, VStack } from "native-base";
+import { useCallback, useState } from "react";
 import { TouchableOpacity } from "react-native";
-import { Feather } from '@expo/vector-icons'
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
+
+import { Feather } from '@expo/vector-icons'
+
+import { Box, Heading, HStack, Icon, Image, Text, useToast, VStack } from "native-base";
+
 import { AppNavigatorRoutesProps } from "@routes/app.routes";
+
+import { Button } from "@components/Button";
+import { TextSkeleton } from "@components/skeletons/TextSkeleton";
+import { ExerciseImageSkeleton } from "@components/skeletons/ExerciseImageSkeleton";
 
 import BodySvg from '@assets/body.svg'
 import SeriesSvg from '@assets/series.svg'
 import RepetitionsSvg from '@assets/repetitions.svg'
-import { Button } from "@components/Button";
-import { useCallback, useEffect, useState } from "react";
+
+import { createHistory } from "@storage/history/createHistory";
 import { getExerciseById } from "@storage/exercises/getExerciseById";
 import { Exercise as ExerciseType } from "@storage/types/exercise";
-import { ExerciseImageSkeleton } from "@components/skeletons/ExerciseImageSkeleton";
-import { TextSkeleton } from "@components/skeletons/TextSkeleton";
-import { createHistory } from "@storage/history/createHistory";
 
 type ExerciseParams = {
   params: {

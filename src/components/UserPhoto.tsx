@@ -1,10 +1,10 @@
 import { Image, IImageProps } from "native-base";
 
-type Props = IImageProps & {
+type UserPhotoProps = IImageProps & {
   size: number
 }
 
-export function UserPhoto({ size, ...rest }: Props ) {
+export function UserPhoto({ size, ...rest }: UserPhotoProps) {
   return (
     <Image 
       w={size}

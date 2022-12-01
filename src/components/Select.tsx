@@ -1,7 +1,6 @@
 import {
   Select as NativeBaseSelect,
   ISelectProps as NativeBaseSelectProps,
-  CheckIcon
 } from 'native-base'
 
 type SelectProps = NativeBaseSelectProps & { 

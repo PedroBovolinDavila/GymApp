@@ -1,18 +1,23 @@
-import { Checkbox, FlatList, Heading, HStack, Icon, Text, useToast, VStack } from "native-base";
-import { TouchableOpacity } from "react-native";
-import { Feather } from '@expo/vector-icons'
-import { AppNavigatorRoutesProps } from "@routes/app.routes";
-import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
-import { ExerciseCard } from "@components/ExerciseCard";
 import { useCallback, useState } from "react";
-import { findTrainingById } from "@storage/training/findTrainingById";
-import {Training } from '@storage/types/training'
-import { Exercise } from "@storage/types/exercise";
-import { listExercisesByIds } from "@storage/exercises/listExercisesByIds";
+import { TouchableOpacity } from "react-native";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
+
+import { Feather } from '@expo/vector-icons'
+
+import { Checkbox, FlatList, Heading, HStack, Icon, Text, useToast, VStack } from "native-base";
+
+import { AppNavigatorRoutesProps } from "@routes/app.routes";
+
 import { Group } from "@components/Group";
+import { ExerciseCard } from "@components/ExerciseCard";
 import { TextSkeleton } from "@components/skeletons/TextSkeleton";
 import { ExerciseCardSkeleton } from "@components/skeletons/ExerciseCardSkeleton";
+
+import {Training } from '@storage/types/training'
+import { Exercise } from "@storage/types/exercise";
 import { createHistory } from "@storage/history/createHistory";
+import { findTrainingById } from "@storage/training/findTrainingById";
+import { listExercisesByIds } from "@storage/exercises/listExercisesByIds";
 
 type TrainingDetailsParams  = {
   params: {

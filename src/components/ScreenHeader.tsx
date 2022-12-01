@@ -1,10 +1,10 @@
 import { Center, Heading } from "native-base";
 
-type Props = {
+type ScreenHeaderProps = {
   title: string 
 }
 
-export function ScreenHeader({ title }: Props) {
+export function ScreenHeader({ title }: ScreenHeaderProps) {
   return (
     <Center 
       bg="gray.500"
