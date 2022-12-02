@@ -1,27 +1,35 @@
-import { useForm, Controller } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 import { VStack, Image, Text, Center, Heading, ScrollView } from "native-base";
 
+import backgroundImg from '@assets/background.png'
+
+import LogoSvg from '@assets/logo.svg'
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
 
-import backgroundImg from '@assets/background.png'
-import LogoSvg from '@assets/logo.svg'
+const signUpFormSchema = yup.object({
+  name: yup.string().required('Informe seu nome'),
+  email: yup.string().required('Informe o email').email('Email invalido'),
+  password: yup.string().required('Informe sua senha').min(6, 'A senha deve ter pelo menos 6 digitos'),
+  passwordConfirm: yup.string().required('Confirme sua senha').oneOf([yup.ref('password'), null], 'As senhas não são iguais')
+})
 
-type SignUpFormInputs = {
-  name: string
-  email: string
-  password: string
-  passwordConfirm: string
-}
+type FormDataProps = yup.InferType<typeof signUpFormSchema>
 
 export function SignUp() {
   const { 
-    control, 
-    handleSubmit, 
-    formState: { errors } 
-  } = useForm<SignUpFormInputs>()
+    control,
+    handleSubmit,
+    formState: {
+      errors
+    }
+  } = useForm<FormDataProps>({
+    resolver: yupResolver(signUpFormSchema)
+  })
 
   const navigation = useNavigation()
 
@@ -29,12 +37,13 @@ export function SignUp() {
     navigation.goBack()
   }
 
-  function SignUp({ name, email, password, passwordConfirm }: SignUpFormInputs) {
-    console.log(name, email, password, passwordConfirm);
-  }
+  function handleSignUp(data: FormDataProps) {
+    console.log(data);
+    
+  } 
 
   return (
-    <ScrollView  
+    <ScrollView 
       contentContainerStyle={{ flexGrow: 1 }} 
       showsVerticalScrollIndicator={false}
     >
@@ -56,68 +65,45 @@ export function SignUp() {
         </Center>
 
         <Center>
-          <Heading color="gray.100" fontSize="xl" mb={6} fontFamily="heading">
+          <Heading color="gray.100" fontSize="xl" mb={6} fontFamily="heading" >
             Crie sua conta
           </Heading>
-
+              
           <Controller 
             control={control}
             name="name"
-            rules={{
-              required: 'Informe o nome.'
-            }}
-            render={({ field: { onChange, value }}) => (
+            render={({ field: { onChange } }) => (
               <Input 
                 placeholder="Nome" 
-                autoCapitalize="words"
                 onChangeText={onChange} 
-                value={value}
+                errorMessage={errors.name?.message}
               />
             )}
           />
 
-          {errors.name && (
-            <Text color="white">
-              {errors.name.message}       
-            </Text>
-          )}
-
           <Controller 
             control={control}
             name="email"
-            rules={{
-              required: 'Informe um e-mail.',
-              pattern: {
-                value:/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: 'E-mail inválido'
-              }
-            }}
-            render={({ field: { onChange, value }}) => (
+            render={({ field: { onChange } }) => (
               <Input 
                 placeholder="E-mail" 
                 keyboardType="email-address"
                 autoCapitalize="none"
                 onChangeText={onChange}
-                value={value}
+                errorMessage={errors.email?.message}
               />
             )}
           />
 
-          {errors.email && (
-            <Text color="white">
-              {errors.email.message}
-            </Text>
-          )}
-
           <Controller 
             control={control}
             name="password"
-            render={({ field: { onChange, value }}) => (
+            render={({ field: { onChange } }) => (
               <Input 
                 placeholder="Senha" 
                 secureTextEntry
                 onChangeText={onChange}
-                value={value}
+                errorMessage={errors.password?.message}
               />
             )}
           />
@@ -125,23 +111,24 @@ export function SignUp() {
           <Controller 
             control={control}
             name="passwordConfirm"
-            render={({ field: { onChange, value }}) => (
+            render={({ field: { onChange } }) => (
               <Input 
-                placeholder="Confirme a senha" 
+                placeholder="Confimar senha" 
                 secureTextEntry
                 onChangeText={onChange}
-                value={value}
-                onSubmitEditing={handleSubmit(SignUp)}
+                onSubmitEditing={handleSubmit(handleSignUp)}
                 returnKeyType="send"
+                errorMessage={errors.passwordConfirm?.message}
               />
             )}
-          />  
+          />
 
-          <Button title="Criar e acessar" onPress={handleSubmit(SignUp)} />
+          <Button title="Criar e acessar" onPress={handleSubmit(handleSignUp)} />
+
         </Center>
 
         <Button 
-          mt={24} 
+          my={16} 
           title="Voltar para o login"
           variant="outline" 
           onPress={handleGoBack}
