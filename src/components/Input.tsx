@@ -1,7 +1,8 @@
 import { 
   Input as NativeBaseInput, 
   IInputProps as NativeBaseInputProps ,
-  FormControl
+  FormControl,
+  WarningOutlineIcon
 } from "native-base"
 
 type Props = NativeBaseInputProps & {
@@ -37,7 +38,7 @@ export function Input({ errorMessage = null, ...rest }: Props){
         {...rest}
       />
 
-      <FormControl.ErrorMessage>
+      <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
         {errorMessage}
       </FormControl.ErrorMessage>
     </FormControl>
