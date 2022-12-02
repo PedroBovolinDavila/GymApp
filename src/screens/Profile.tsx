@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { TouchableOpacity } from "react-native";
+import * as yup from 'yup'
 
 import * as ImagePicker from 'expo-image-picker'
 import * as FileSystem from 'expo-file-system'
@@ -12,12 +13,30 @@ import { Button } from "@components/Button";
 import { UserPhoto } from "@components/UserPhoto";
 import { ScreenHeader } from "@components/ScreenHeader";
 import { UserPhotoSkeleton } from "@components/skeletons/UserPhotoSkeleton";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const changePasswordFormSchema = yup.object({
+  oldPassword: yup.string().required('Informe sua senha antiga'),
+  newPassword: yup.string().required('Informe sua nova senha').min(6, 'Sua senha deve ter pelo menos 6 caracteres'),
+  newPasswordConfirm: yup.string().required('Confirme sua senha').oneOf([yup.ref('newPassword'), null], 'As senhas não são iguais')
+})
+
+type ChangePasswordFormInputs = yup.InferType<typeof changePasswordFormSchema>
 
 export function Profile() {
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [photoIsLoading, setPhotoIsLoading] = useState(false)
   const [userPhoto, setUserPhoto] = useState('https://github.com/pedrobovolindavila.png')
   
+  const {
+    control,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<ChangePasswordFormInputs>({
+    resolver: yupResolver(changePasswordFormSchema)
+  })
+
   const toast = useToast()
 
   async function handleSelectPhotoFromGallery() {
@@ -81,6 +100,11 @@ export function Profile() {
     } finally {
       setPhotoIsLoading(false)
     }
+  }
+
+  function handleUpdatePassword(data: ChangePasswordFormInputs) {
+    console.log(data);
+    
   }
 
   return (
@@ -152,6 +176,7 @@ export function Profile() {
           <Input
             bg="gray.600"
             placeholder="Nome"
+            isDisabled
           />
           <Input
             bg="gray.600"
@@ -159,6 +184,7 @@ export function Profile() {
             isDisabled
           />
         </Center>
+
         <VStack
           px={10}
           mb={9}
@@ -168,23 +194,49 @@ export function Profile() {
             Alterar senha
           </Heading>
         
-          <Input
-            bg="gray.600"
-            placeholder="Senha antiga"
-            secureTextEntry
-          />
-          <Input
-            bg="gray.600"
-            placeholder="Nova senha"
-            secureTextEntry
-          />
-          <Input
-            bg="gray.600"
-            placeholder="Confirme a nova senha"
-            secureTextEntry
+          <Controller 
+            control={control}
+            name="oldPassword"
+            render={({ field: { onChange }}) => (
+              <Input
+                bg="gray.600"
+                placeholder="Senha antiga"
+                onChangeText={onChange}
+                secureTextEntry
+                errorMessage={errors.oldPassword?.message}
+              />
+            )}
           />
 
-          <Button title="Atualizar" mt={4}  />
+          <Controller 
+            control={control}
+            name="newPassword"
+            render={({ field: { onChange }}) => (
+              <Input
+                bg="gray.600"
+                placeholder="Nova senha"
+                onChangeText={onChange}
+                secureTextEntry
+                errorMessage={errors.newPassword?.message}
+              />
+            )}
+          />
+
+          <Controller 
+            control={control}
+            name="newPasswordConfirm"
+            render={({ field: { onChange }}) => (
+              <Input
+                bg="gray.600"
+                placeholder="Confirme a nova senha"
+                onChangeText={onChange}
+                secureTextEntry
+                errorMessage={errors.newPasswordConfirm?.message}
+              />
+            )}
+          />
+
+          <Button title="Atualizar" mt={4} onPress={handleSubmit(handleUpdatePassword)} />
         </VStack>
       </ScrollView>
     </VStack>
