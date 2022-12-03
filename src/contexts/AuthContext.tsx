@@ -2,17 +2,25 @@ import { createContext, ReactNode, useState } from "react";
 
 import { User } from "@storage/types/user";
 import { createSession } from "@storage/user/createSession";
+import { updatePassword } from "@storage/user/updatePassword";
+import { updateUserAvatar } from "@storage/user/updateUserAvatar";
 
 type AuthenticatedUserProps = {
   email: string
   password: string
 }
 
+type UpdateUserProps = {
+  avatar?: string
+  newPassword?: string
+  oldPassword?: string
+}
+
 type AuthContextProps = {
   user: User
   isAuthenticated: boolean
   authenticateUser: ({ email, password }: AuthenticatedUserProps) => Promise<string | undefined>
-  updateUserPassword: (newPassword: string) => void
+  updateUser: ({ avatar, newPassword, oldPassword }: UpdateUserProps) => Promise<Error | undefined>
   logoff: () => void
 }
 
@@ -44,17 +52,36 @@ function AuthProvider({ children }: AuthProviderProps) {
     setIsAuthenticated(false)
   }
 
-  function updateUserPassword(newPassword: string) {
-    setUser(user => (
-      {
-        ...user,
-        password: newPassword
+  async function updateUser({ avatar, newPassword, oldPassword }: UpdateUserProps) {
+    if (avatar) {
+      const result = await updateUserAvatar({ avatar })
+
+      if (result instanceof Error) {
+        return new Error(result.message)
       }
-    ))
-  }
 
-  function updateUser({  }) {
+      setUser(user => (
+        {
+          ...user,
+          avatar
+        }
+      ))
+    }
 
+    if (newPassword && oldPassword) {
+      const result = await updatePassword({ newPassword, oldPassword })
+
+      if (result instanceof Error) {
+        return new Error(result.message)
+      }
+
+      setUser(user => (
+        {
+          ...user,
+          password: newPassword
+        }
+      ))
+    }
   }
 
   return (
@@ -63,7 +90,7 @@ function AuthProvider({ children }: AuthProviderProps) {
       user: user!,
       authenticateUser,
       logoff,
-      updateUserPassword
+      updateUser
     }}>
       {children}
     </AuthContext.Provider>

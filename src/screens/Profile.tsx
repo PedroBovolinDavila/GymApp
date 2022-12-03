@@ -19,12 +19,10 @@ import { UserPhoto } from "@components/UserPhoto";
 import { ScreenHeader } from "@components/ScreenHeader";
 import { UserPhotoSkeleton } from "@components/skeletons/UserPhotoSkeleton";
 
-import { updatePassword } from "@storage/user/updatePassword";
-
 const changePasswordFormSchema = yup.object({
-  oldPassword: yup.string().required('Informe sua senha antiga'),
-  newPassword: yup.string().required('Informe sua nova senha').min(6, 'Sua senha deve ter pelo menos 6 caracteres'),
-  newPasswordConfirm: yup.string().required('Confirme sua senha').oneOf([yup.ref('newPassword'), null], 'As senhas não são iguais')
+  oldPassword: yup.string(),
+  newPassword: yup.string().min(6, 'Sua senha deve ter pelo menos 6 caracteres'),
+  newPasswordConfirm: yup.string().oneOf([yup.ref('newPassword'), null], 'As senhas não são iguais')
 })
 
 type ChangePasswordFormInputs = yup.InferType<typeof changePasswordFormSchema>
@@ -34,7 +32,7 @@ export function Profile() {
   const [photoIsLoading, setPhotoIsLoading] = useState(false)
   const [userPhoto, setUserPhoto] = useState('')
 
-  const { user, updateUserPassword } = useAuth()
+  const { user, updateUser } = useAuth()
   
   const {
     control,
@@ -109,8 +107,9 @@ export function Profile() {
     }
   }
 
-  async function handleUpdatePassword({ newPassword, oldPassword }: ChangePasswordFormInputs) {
-    const result = await updatePassword({
+  async function handleUpdateUser({ newPassword, oldPassword }: ChangePasswordFormInputs) {
+    const result = await updateUser({
+      avatar: userPhoto,
       newPassword,
       oldPassword
     })
@@ -123,14 +122,11 @@ export function Profile() {
       })
     }
 
-    updateUserPassword(newPassword)
-    
     toast.show({
-      title: 'Senha atualizada com sucesso',
+      title: 'Usuário atualizado com sucesso',
       bg: 'green.500',
       placement: 'top'
     })
-
   }
 
   return (
@@ -264,7 +260,7 @@ export function Profile() {
             )}
           />
 
-          <Button title="Atualizar" mt={4} onPress={handleSubmit(handleUpdatePassword)} />
+          <Button title="Atualizar" mt={4} onPress={handleSubmit(handleUpdateUser)} />
         </VStack>
       </ScrollView>
     </VStack>
