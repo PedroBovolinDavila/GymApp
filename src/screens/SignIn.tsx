@@ -1,5 +1,8 @@
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native'
+
+import { useAuth } from '@hooks/useAuth';
+
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup'
 
@@ -12,7 +15,6 @@ import { Button } from "@components/Button";
 
 import LogoSvg from '@assets/logo.svg'
 import backgroundImg from '@assets/background.png'
-import { useAuth } from '@hooks/useAuth';
 
 const signInFormSchema = yup.object({
   email: yup.string().required('Informe seu email').email('Email invalido'),

@@ -1,15 +1,17 @@
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native'
-import * as yup from 'yup'
+
 import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
 
 import { VStack, Image, Text, Center, Heading, ScrollView, useToast } from "native-base";
 
-import backgroundImg from '@assets/background.png'
-
-import LogoSvg from '@assets/logo.svg'
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
+
+import LogoSvg from '@assets/logo.svg'
+import backgroundImg from '@assets/background.png'
+
 import { createUser } from '@storage/user/createUser';
 
 const signUpFormSchema = yup.object({
@@ -27,9 +29,12 @@ export function SignUp() {
     handleSubmit,
     formState: {
       errors
-    }
+    },
+    setFocus
   } = useForm<FormDataProps>({
-    resolver: yupResolver(signUpFormSchema)
+    resolver: yupResolver(signUpFormSchema),
+    shouldFocusError: true
+    
   })
 
   const navigation = useNavigation()
@@ -64,11 +69,8 @@ export function SignUp() {
   } 
 
   return (
-    <ScrollView 
-      contentContainerStyle={{ flexGrow: 1 }} 
-      showsVerticalScrollIndicator={false}
-    >
-      <VStack flex={1} px={7}>
+    <ScrollView flex={1} showsVerticalScrollIndicator={false}>
+      <VStack px={7}>
         <Image 
           source={backgroundImg}
           defaultSource={backgroundImg}
@@ -93,11 +95,13 @@ export function SignUp() {
           <Controller 
             control={control}
             name="name"
-            render={({ field: { onChange } }) => (
+            render={({ field: { onChange, ref } }) => (
               <Input 
                 placeholder="Nome" 
                 onChangeText={onChange} 
                 errorMessage={errors.name?.message}
+                ref={ref}
+                onSubmitEditing={() => setFocus('email')}
               />
             )}
           />
@@ -105,13 +109,15 @@ export function SignUp() {
           <Controller 
             control={control}
             name="email"
-            render={({ field: { onChange } }) => (
+            render={({ field: { onChange, ref } }) => (
               <Input 
+                ref={ref}
                 placeholder="E-mail" 
                 keyboardType="email-address"
                 autoCapitalize="none"
                 onChangeText={onChange}
                 errorMessage={errors.email?.message}
+                onSubmitEditing={() => setFocus('password')}
               />
             )}
           />
@@ -119,12 +125,14 @@ export function SignUp() {
           <Controller 
             control={control}
             name="password"
-            render={({ field: { onChange } }) => (
+            render={({ field: { onChange, ref } }) => (
               <Input 
+                ref={ref}
                 placeholder="Senha" 
                 secureTextEntry
                 onChangeText={onChange}
                 errorMessage={errors.password?.message}
+                onSubmitEditing={() => setFocus('passwordConfirm')}
               />
             )}
           />
@@ -132,8 +140,9 @@ export function SignUp() {
           <Controller 
             control={control}
             name="passwordConfirm"
-            render={({ field: { onChange } }) => (
+            render={({ field: { onChange, ref } }) => (
               <Input 
+                ref={ref}
                 placeholder="Confimar senha" 
                 secureTextEntry
                 onChangeText={onChange}

@@ -1,9 +1,12 @@
 import { useCallback, useState } from "react";
 import { TouchableOpacity } from "react-native";
+import { Controller, useForm } from "react-hook-form";
 import { useFocusEffect } from "@react-navigation/native";
-import * as yup from 'yup'
 
 import * as ImagePicker from 'expo-image-picker';
+
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from 'yup'
 
 import { HStack, Modal, ScrollView, Text, useToast, VStack } from "native-base";
 
@@ -17,8 +20,6 @@ import { UserPhotoSkeleton } from "@components/skeletons/UserPhotoSkeleton";
 import { listGroups } from "@storage/groups/listGroups";
 import { createGroup } from "@storage/groups/createGroup";
 import { createExercise } from "@storage/exercises/createExercise";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 type MuscularGroup = {
   label: string
@@ -198,7 +199,7 @@ export function CreateExercise() {
                 />
               )}
             />    
-           
+            
             <VStack mb={4} space={2}>
               <Controller 
                 control={control}

@@ -1,5 +1,6 @@
-import { useAuth } from '@hooks/useAuth'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
+
+import { useAuth } from '@hooks/useAuth'
 
 import { Box, useTheme } from 'native-base'
 

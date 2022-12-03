@@ -1,10 +1,15 @@
 import { useState } from "react";
 import { TouchableOpacity } from "react-native";
-import * as yup from 'yup'
+import { Controller, useForm } from "react-hook-form";
 
-import * as ImagePicker from 'expo-image-picker'
-import * as FileSystem from 'expo-file-system'
 import { MaterialIcons } from '@expo/vector-icons'
+import * as FileSystem from 'expo-file-system'
+import * as ImagePicker from 'expo-image-picker'
+
+import { useAuth } from "@hooks/useAuth";
+
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from 'yup'
 
 import { Center, ScrollView, VStack, Text, Heading, useToast, Icon, HStack, Modal, IconButton } from "native-base";
 
@@ -13,9 +18,7 @@ import { Button } from "@components/Button";
 import { UserPhoto } from "@components/UserPhoto";
 import { ScreenHeader } from "@components/ScreenHeader";
 import { UserPhotoSkeleton } from "@components/skeletons/UserPhotoSkeleton";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useAuth } from "@hooks/useAuth";
+
 import { updatePassword } from "@storage/user/updatePassword";
 
 const changePasswordFormSchema = yup.object({

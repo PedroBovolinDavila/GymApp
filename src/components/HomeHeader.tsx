@@ -1,10 +1,11 @@
 import { TouchableOpacity } from "react-native";
 import { MaterialIcons } from '@expo/vector-icons'
 
+import { useAuth } from "@hooks/useAuth";
+
 import { Heading, HStack, Icon, Text, VStack } from "native-base";
 
 import { UserPhoto } from "./UserPhoto";
-import { useAuth } from "@hooks/useAuth";
 
 export function HomeHeader() {
   const { user, logoff } = useAuth()  

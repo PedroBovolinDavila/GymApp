@@ -5,11 +5,11 @@ import {
   WarningOutlineIcon
 } from "native-base"
 
-type Props = NativeBaseInputProps & {
+type InputProps = NativeBaseInputProps & {
   errorMessage?: string | null
 }
 
-export function Input({ errorMessage = null, ...rest }: Props){
+export function Input({ errorMessage = null, ...rest }: InputProps){
   const isInvalid = !!errorMessage
 
   return (

@@ -1,14 +1,11 @@
+import { createContext, ReactNode, useState } from "react";
+
 import { User } from "@storage/types/user";
 import { createSession } from "@storage/user/createSession";
-import { createContext, ReactNode, useState } from "react";
 
 type AuthenticatedUserProps = {
   email: string
   password: string
-}
-
-type UpdateUserProps = {
-
 }
 
 type AuthContextProps = {
