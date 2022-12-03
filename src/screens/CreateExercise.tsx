@@ -230,7 +230,12 @@ export function CreateExercise() {
             <Modal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)} p={8}>
               <Modal.Content w="full" >
                 <Modal.Body bg="gray.400" borderRadius="lg" p={5}>
-                  <Input placeholder="Nome do grupo" onChangeText={setNewMuscularGroup} />
+                  <Input 
+                    placeholder="Nome do grupo" 
+                    onChangeText={setNewMuscularGroup} 
+                    onSubmitEditing={handleCreateGroup}
+                    returnKeyType="send"
+                  />
                   <Button title="Adicionar" onPress={handleCreateGroup} />
                 </Modal.Body>
               </Modal.Content>
@@ -260,6 +265,8 @@ export function CreateExercise() {
                   onChangeText={onChange}
                   errorMessage={errors.repetitions?.message}
                   value={value}
+                  onSubmitEditing={handleSubmit(handleNewExercise)}
+                  returnKeyType="send"
                 />
               )}
             />  
