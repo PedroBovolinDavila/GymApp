@@ -15,6 +15,8 @@ import { ScreenHeader } from "@components/ScreenHeader";
 import { UserPhotoSkeleton } from "@components/skeletons/UserPhotoSkeleton";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useAuth } from "@hooks/useAuth";
+import { updatePassword } from "@storage/user/updatePassword";
 
 const changePasswordFormSchema = yup.object({
   oldPassword: yup.string().required('Informe sua senha antiga'),
@@ -27,7 +29,9 @@ type ChangePasswordFormInputs = yup.InferType<typeof changePasswordFormSchema>
 export function Profile() {
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [photoIsLoading, setPhotoIsLoading] = useState(false)
-  const [userPhoto, setUserPhoto] = useState('https://github.com/pedrobovolindavila.png')
+  const [userPhoto, setUserPhoto] = useState('')
+
+  const { user, updateUserPassword } = useAuth()
   
   const {
     control,
@@ -102,9 +106,28 @@ export function Profile() {
     }
   }
 
-  function handleUpdatePassword(data: ChangePasswordFormInputs) {
-    console.log(data);
+  async function handleUpdatePassword({ newPassword, oldPassword }: ChangePasswordFormInputs) {
+    const result = await updatePassword({
+      newPassword,
+      oldPassword
+    })
+
+    if (result instanceof Error) {
+      return toast.show({
+        title: result.message,
+        bg: 'red.500',
+        placement: 'top'
+      })
+    }
+
+    updateUserPassword(newPassword)
     
+    toast.show({
+      title: 'Senha atualizada com sucesso',
+      bg: 'green.500',
+      placement: 'top'
+    })
+
   }
 
   return (
@@ -116,7 +139,7 @@ export function Profile() {
           {
             photoIsLoading ? <UserPhotoSkeleton size={33} /> : (
               <UserPhoto
-                source={{ uri: userPhoto }}
+                source={{ uri: userPhoto.length > 0 ? userPhoto : user.avatar }}
                 alt="Foto do usuario"
                 size={33}
               />
@@ -177,11 +200,13 @@ export function Profile() {
             bg="gray.600"
             placeholder="Nome"
             isDisabled
+            value={user.name}
           />
           <Input
             bg="gray.600"
             placeholder="Informe o seu email no registro"
             isDisabled
+            value={user.email}
           />
         </Center>
 

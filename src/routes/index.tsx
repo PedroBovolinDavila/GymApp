@@ -1,3 +1,4 @@
+import { useAuth } from '@hooks/useAuth'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 
 import { Box, useTheme } from 'native-base'
@@ -6,6 +7,8 @@ import { AppRoutes } from './app.routes'
 import { AuthRoutes } from './auth.routes'
 
 export function Routes(){
+  const { isAuthenticated } = useAuth()
+
   const { colors } = useTheme()
 
   const theme = DefaultTheme
@@ -15,7 +18,7 @@ export function Routes(){
   return (
     <Box flex={1} bg="gray.700">
       <NavigationContainer theme={theme}>
-        <AppRoutes />
+        {isAuthenticated ? <AppRoutes /> : <AuthRoutes />}
       </NavigationContainer>
     </Box>
   )

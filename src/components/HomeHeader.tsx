@@ -4,12 +4,15 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { Heading, HStack, Icon, Text, VStack } from "native-base";
 
 import { UserPhoto } from "./UserPhoto";
+import { useAuth } from "@hooks/useAuth";
 
 export function HomeHeader() {
+  const { user, logoff } = useAuth()  
+
   return (
     <HStack bg="gray.600" pt={16} pb={5} px={8} alignItems="center">
       <UserPhoto
-        source={{ uri: 'https://github.com/pedrobovolindavila.png' }}
+        source={{ uri: user.avatar }}
         size={16}
         alt="Imagem do usuário"
       />
@@ -20,11 +23,11 @@ export function HomeHeader() {
         </Text>
 
         <Heading color="gray.100" fontSize="lg">
-          Pedro
+          {user.name}
         </Heading>
       </VStack>
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={logoff}>
         <Icon 
           as={MaterialIcons}
           name="logout"

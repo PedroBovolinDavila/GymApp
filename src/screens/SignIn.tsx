@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native'
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup'
 
-import { VStack, Image, Text, Center, Heading, ScrollView } from "native-base";
+import { VStack, Image, Text, Center, Heading, ScrollView, Toast, useToast } from "native-base";
 
 import { AuthNavigatorRoutesProps } from '@routes/auth.routes';
 
@@ -12,6 +12,7 @@ import { Button } from "@components/Button";
 
 import LogoSvg from '@assets/logo.svg'
 import backgroundImg from '@assets/background.png'
+import { useAuth } from '@hooks/useAuth';
 
 const signInFormSchema = yup.object({
   email: yup.string().required('Informe seu email').email('Email invalido'),
@@ -21,6 +22,8 @@ const signInFormSchema = yup.object({
 type SignInFormInputs = yup.InferType<typeof signInFormSchema>
 
 export function SignIn() {
+  const { authenticateUser } = useAuth()
+
   const { 
     control,
     handleSubmit,
@@ -29,15 +32,27 @@ export function SignIn() {
     resolver: yupResolver(signInFormSchema)
   })
 
+  const toast = useToast()
+
   const navigation = useNavigation<AuthNavigatorRoutesProps>()
 
   function handleNewAccount() {
     navigation.navigate('SignUp')
   }
 
-  function handleSignIn({ email, password }: SignInFormInputs) {
-    console.log(email, password);
-    
+  async function handleSignIn({ email, password }: SignInFormInputs) {
+    const error = await authenticateUser({
+      email,
+      password
+    })
+
+    if (error) {
+      return toast.show({
+        title: error,
+        bg: 'red.500',
+        placement: 'top'
+      })
+    }
   }
 
   return (
