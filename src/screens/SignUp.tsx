@@ -30,7 +30,6 @@ export function SignUp() {
     formState: {
       errors
     },
-    setFocus
   } = useForm<FormDataProps>({
     resolver: yupResolver(signUpFormSchema),
     shouldFocusError: true
@@ -95,13 +94,11 @@ export function SignUp() {
           <Controller 
             control={control}
             name="name"
-            render={({ field: { onChange, ref } }) => (
+            render={({ field: { onChange } }) => (
               <Input 
                 placeholder="Nome" 
                 onChangeText={onChange} 
                 errorMessage={errors.name?.message}
-                ref={ref}
-                onSubmitEditing={() => setFocus('email')}
               />
             )}
           />
@@ -109,15 +106,13 @@ export function SignUp() {
           <Controller 
             control={control}
             name="email"
-            render={({ field: { onChange, ref } }) => (
+            render={({ field: { onChange} }) => (
               <Input 
-                ref={ref}
                 placeholder="E-mail" 
                 keyboardType="email-address"
                 autoCapitalize="none"
                 onChangeText={onChange}
                 errorMessage={errors.email?.message}
-                onSubmitEditing={() => setFocus('password')}
               />
             )}
           />
@@ -125,14 +120,12 @@ export function SignUp() {
           <Controller 
             control={control}
             name="password"
-            render={({ field: { onChange, ref } }) => (
+            render={({ field: { onChange } }) => (
               <Input 
-                ref={ref}
                 placeholder="Senha" 
                 secureTextEntry
                 onChangeText={onChange}
                 errorMessage={errors.password?.message}
-                onSubmitEditing={() => setFocus('passwordConfirm')}
               />
             )}
           />
@@ -140,9 +133,8 @@ export function SignUp() {
           <Controller 
             control={control}
             name="passwordConfirm"
-            render={({ field: { onChange, ref } }) => (
+            render={({ field: { onChange } }) => (
               <Input 
-                ref={ref}
                 placeholder="Confimar senha" 
                 secureTextEntry
                 onChangeText={onChange}

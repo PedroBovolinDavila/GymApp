@@ -14,7 +14,7 @@ export async function createUser({ name, email, password }: CreateUserProps) {
       name,
       email,
       password,
-      avatar: `https://www.seekpng.com/png/detail/110-1100707_person-avatar-placeholder.png`
+      avatar: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541'
     }
 
     await AsyncStorage.setItem(USER_KEY, JSON.stringify(user))
