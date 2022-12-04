@@ -31,7 +31,7 @@ type AuthProviderProps = {
 }
 
 function AuthProvider({ children }: AuthProviderProps) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(true)
   const [user, setUser] = useState<User>({} as User)
 
   async function authenticateUser({ email, password }: AuthenticatedUserProps) {

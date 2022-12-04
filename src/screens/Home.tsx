@@ -4,7 +4,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 import { AntDesign } from '@expo/vector-icons'
 
-import { FlatList, Heading, HStack, Icon, Text, VStack } from "native-base";
+import { Center, FlatList, Heading, HStack, Icon, Pressable, Text, VStack } from "native-base";
 
 import { AppNavigatorRoutesProps } from "@routes/app.routes";
 
@@ -23,6 +23,7 @@ export function Home() {
   const [exercises, setExercises] = useState<Exercise[]>([])
   const [groups, setGroups] = useState<string[]>([]) 
   const [groupSelected, setGroupSelected] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
@@ -43,12 +44,15 @@ export function Home() {
   }
 
   useFocusEffect(useCallback(() => {
+    setIsLoading(true)
+
     async function fetchData() {
       const exercises = await listExercises()   
       const groups = await listGroups()   
       
       setGroups(groups?.map(group => group.title)!)
       setExercises(exercises!)
+      setIsLoading(false)
     }
 
     fetchData()
@@ -58,7 +62,7 @@ export function Home() {
     <VStack flex={1}>
       <HomeHeader />
 
-      {groups.length === 0 ? (
+      {isLoading ? (
         <HStack my={10} px={8}>
           <GroupSkeleton />
           <GroupSkeleton />
@@ -108,7 +112,7 @@ export function Home() {
           </TouchableOpacity>
         </HStack> 
 
-        {exercises.length === 0 ? (
+        {isLoading ? (
           <VStack>
             <ExerciseCardSkeleton />
             <ExerciseCardSkeleton />
@@ -126,8 +130,26 @@ export function Home() {
 
             showsVerticalScrollIndicator={false}
             _contentContainerStyle={{
-              paddingBottom: 10
+              paddingBottom: 10,
+              ...(exercises.length === 0 && {
+                flex: 1,
+                justifyContent: 'center'
+              })
             }}
+
+            ListEmptyComponent={() => (
+              <Center>
+                <Text color="gray.100" textAlign="center">
+                  Você não possui nenhum exercicio cadastrado.
+                </Text>
+
+                <Pressable mt={4} onPress={handleOpenNewExercise}>
+                  <Text color="green.500" textAlign="center">
+                    Clique aqui e cadastre agora mesmo
+                  </Text>
+                </Pressable>
+              </Center>
+            )}
           />
         }
       </VStack>

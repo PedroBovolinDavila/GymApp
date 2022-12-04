@@ -4,7 +4,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 import { AntDesign } from '@expo/vector-icons'
 
-import { FlatList, HStack, Icon, Text, VStack } from "native-base";
+import { Center, FlatList, HStack, Icon, Pressable, Text, VStack } from "native-base";
 
 import { AppNavigatorRoutesProps } from "@routes/app.routes";
 
@@ -76,6 +76,25 @@ export function Workouts() {
               />
             )}
             showsVerticalScrollIndicator={false}
+            
+            contentContainerStyle={trainings?.length === 0 && {
+              flex: 1,
+              justifyContent: 'center'
+            }}
+
+            ListEmptyComponent={() => (
+              <Center>
+                <Text color="gray.100" textAlign="center">
+                  Você não possui nenhum treino criado.
+                </Text>
+
+                <Pressable mt={4} onPress={handleOpenCreateTraining}>
+                  <Text color="green.500" textAlign="center">
+                    Clique aqui e cadastre agora mesmo
+                  </Text>
+                </Pressable>
+              </Center>
+            )}
           />
         )}
 

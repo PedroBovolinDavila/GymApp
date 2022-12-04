@@ -141,27 +141,29 @@ export function CreateExercise() {
       }) 
     }
 
+    fetchGroups()
+
     toast.show({
-      title: 'Grupo criado com sucesso. Atualize a página',
+      title: 'Grupo criado com sucesso',
       placement: 'top',
       bg: 'green.500'
     })
 
     setModalIsOpen(false)
   }
-  
+
+  async function fetchGroups() {
+    const data = await listGroups()
+
+    setSelectMuscularGroups(data?.map(group => (
+      {
+        label: group.title,
+        value: group.title
+      }
+    ))!)
+  }
+
   useFocusEffect(useCallback(() => {
-    async function fetchGroups() {
-      const data = await listGroups()
-
-      setSelectMuscularGroups(data?.map(group => (
-        {
-          label: group.title,
-          value: group.title
-        }
-      ))!)
-    }
-
     fetchGroups()
   }, []))
 
