@@ -2,9 +2,9 @@ import { useCallback, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
-import { AntDesign } from '@expo/vector-icons'
+import { AntDesign, FontAwesome } from '@expo/vector-icons'
 
-import { Center, FlatList, Heading, HStack, Icon, Pressable, Text, VStack } from "native-base";
+import { Center, FlatList, Heading, HStack, Icon, IconButton, Modal, Pressable, Text, useSafeArea, useToast, VStack } from "native-base";
 
 import { AppNavigatorRoutesProps } from "@routes/app.routes";
 
@@ -18,12 +18,24 @@ import { Exercise } from "@storage/types/exercise";
 import { listGroups } from "@storage/groups/listGroups";
 import { listExercises } from "@storage/exercises/listExercises";
 import { filterExerciseByGroup } from "@storage/exercises/filterExerciseByGroup";
+import { removeExercise } from "@storage/exercises/removeExercise";
+
+type ModalProps = {
+  isOpen: boolean
+  exerciseId: string
+}
 
 export function Home() {
   const [exercises, setExercises] = useState<Exercise[]>([])
   const [groups, setGroups] = useState<string[]>([]) 
   const [groupSelected, setGroupSelected] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [modalData, setModalData] = useState<ModalProps>({
+    isOpen: false,
+    exerciseId: ''
+  })
+
+  const toast = useToast()
 
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
@@ -34,6 +46,13 @@ export function Home() {
   function handleOpenNewExercise() {
     navigation.navigate('createExercise')
   }
+  
+  function handleOpenModal(exerciseId: string) {
+    setModalData({
+      isOpen: true,
+      exerciseId
+    })    
+  }
 
   async function handleSelectGroup(group: string) {
     setGroupSelected(group)
@@ -41,6 +60,27 @@ export function Home() {
     const exercises = await filterExerciseByGroup(group)
 
     setExercises(exercises!)
+  }
+
+  async function handleDeleteExercise() {
+    const result = await removeExercise(modalData.exerciseId)
+    
+    if (result instanceof Error) {
+      return toast.show({
+        title: result.message,
+        bg: 'red.500',
+        placement: 'top'
+      })
+    }
+
+    setExercises(result)
+    setModalData({ isOpen: false, exerciseId: '' })
+
+    toast.show({
+      title: 'Exercicio removido com sucesso',
+      bg: 'green.500',
+      placement: 'top'
+    })
   }
 
   useFocusEffect(useCallback(() => {
@@ -52,6 +92,7 @@ export function Home() {
       
       setGroups(groups?.map(group => group.title)!)
       setExercises(exercises!)
+      setGroupSelected('')
       setIsLoading(false)
     }
 
@@ -125,7 +166,12 @@ export function Home() {
             data={exercises}
             keyExtractor={item => item.id}
             renderItem={({ item }) => (       
-              <ExerciseCard exercise={item} onPress={() => handleOpenExerciseDetails(item.id)} withIcon /> 
+              <ExerciseCard 
+                exercise={item} 
+                onPress={() => handleOpenExerciseDetails(item.id)} 
+                onLongPress={() => handleOpenModal(item.id)}
+                withIcon 
+              /> 
             )}
 
             showsVerticalScrollIndicator={false}
@@ -152,6 +198,37 @@ export function Home() {
             )}
           />
         }
+
+        <Modal isOpen={modalData.isOpen} onClose={() => setModalData(modal => ({ ...modal, isOpen: false }))}>
+          <Modal.Content>
+            <Modal.Body 
+              bg="gray.400" 
+              borderColor="green.500" 
+              borderWidth={1} 
+              borderRadius="lg" 
+              alignItems="center"
+            >
+              <IconButton
+                icon={<Icon as={FontAwesome} name="trash-o" />}
+                _icon={{
+                  color: 'gray.100',
+                  size: "3xl",
+                }}
+                _pressed={{
+                  bg: 'gray.400',
+                  _icon: {
+                    color: 'red.500'
+                  }
+                }}
+                onPress={handleDeleteExercise}
+              />
+
+              <Text color="gray.100" fontSize="sm">
+                Excluir exercicio
+              </Text>
+            </Modal.Body>
+          </Modal.Content>
+        </Modal>
       </VStack>
     </VStack>
   )
