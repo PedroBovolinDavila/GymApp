@@ -44,7 +44,10 @@ export function CreateExercise() {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { 
+      errors, 
+      isSubmitting 
+    },
     reset
   } = useForm<CreateExerciseFormInputs>({
     resolver: yupResolver(createExerciseFormSchema)
@@ -238,6 +241,7 @@ export function CreateExercise() {
                     onSubmitEditing={handleCreateGroup}
                     returnKeyType="send"
                   />
+
                   <Button title="Adicionar" onPress={handleCreateGroup} />
                 </Modal.Body>
               </Modal.Content>
@@ -278,6 +282,7 @@ export function CreateExercise() {
             title="Criar exercicio"
             onPress={handleSubmit(handleNewExercise)}
             mb={16}
+            isDisabled={isSubmitting}
           />
         </VStack>
       </ScrollView>

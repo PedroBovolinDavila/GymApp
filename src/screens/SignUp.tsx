@@ -28,7 +28,8 @@ export function SignUp() {
     control,
     handleSubmit,
     formState: {
-      errors
+      errors,
+      isSubmitting
     },
   } = useForm<FormDataProps>({
     resolver: yupResolver(signUpFormSchema),
@@ -145,7 +146,11 @@ export function SignUp() {
             )}
           />
 
-          <Button title="Criar e acessar" onPress={handleSubmit(handleSignUp)} />
+          <Button 
+            title="Criar e acessar" 
+            onPress={handleSubmit(handleSignUp)} 
+            isDisabled={isSubmitting}
+          />
 
         </Center>
 

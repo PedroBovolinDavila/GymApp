@@ -29,7 +29,10 @@ export function SignIn() {
   const { 
     control,
     handleSubmit,
-    formState: { errors }
+    formState: { 
+      errors,
+      isSubmitting 
+    }
   } = useForm<SignInFormInputs>({
     resolver: yupResolver(signInFormSchema)
   })
@@ -113,7 +116,11 @@ export function SignIn() {
             )}
           />
 
-          <Button title="Acessar" onPress={handleSubmit(handleSignIn)} />
+          <Button 
+            title="Acessar" 
+            onPress={handleSubmit(handleSignIn)} 
+            isDisabled={isSubmitting}
+          />
 
         </Center>
 
@@ -126,17 +133,14 @@ export function SignIn() {
           >
             Ainda não tem acesso?
           </Text>
+
           <Button 
             title="Criar conta" 
             variant="outline" 
             onPress={handleNewAccount}
             mb={3}
           />
-
-         
         </Center>
-
-       
       </VStack>
     </ScrollView>
   )

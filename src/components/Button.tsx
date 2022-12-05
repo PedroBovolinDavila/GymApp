@@ -3,6 +3,7 @@ import {
   IButtonProps as NativeBaseButtonProps,
   Text
 } from "native-base"
+import { Loading } from "./Loading"
 
 type ButtonProps = NativeBaseButtonProps & {
   title: string
@@ -12,6 +13,7 @@ type ButtonProps = NativeBaseButtonProps & {
 export function Button({ 
   title, 
   variant = 'solid', 
+  isDisabled,
   ...rest 
 }: ButtonProps) {
   return (
@@ -22,6 +24,7 @@ export function Button({
       borderColor="green.500"
       bg={variant === 'outline' ? "transparent" : "green.700"}
       borderWidth={variant === 'outline' ? 1 : 0}
+      isDisabled={isDisabled}
 
       _pressed={{
         bg: variant === 'outline' ? "gray.500" : "green.500"
@@ -29,13 +32,17 @@ export function Button({
 
       {...rest}
     >
-      <Text 
-        color={variant === 'outline' ? "green.500" : "white"} 
-        fontFamily="heading" 
-        fontSize="sm"
-      >
-        {title}
-      </Text>
+      {isDisabled ? (
+        <Loading />
+      ) : (
+        <Text 
+          color={variant === 'outline' ? "green.500" : "white"} 
+          fontFamily="heading" 
+          fontSize="sm"
+        >
+          {title}
+        </Text>
+      )}
     </NativeBaseButton>
   )
 }

@@ -37,7 +37,10 @@ export function Profile() {
   const {
     control,
     handleSubmit,
-    formState: { errors }
+    formState: { 
+      errors, 
+      isSubmitting 
+    }
   } = useForm<ChangePasswordFormInputs>({
     resolver: yupResolver(changePasswordFormSchema)
   })
@@ -79,6 +82,7 @@ export function Profile() {
       console.log(err); 
     } finally {
       setPhotoIsLoading(false)
+      setModalIsOpen(false)
     }
   }
 
@@ -104,6 +108,7 @@ export function Profile() {
       console.log(err);
     } finally {
       setPhotoIsLoading(false)
+      setModalIsOpen(false)
     }
   }
 
@@ -260,7 +265,12 @@ export function Profile() {
             )}
           />
 
-          <Button title="Atualizar" mt={4} onPress={handleSubmit(handleUpdateUser)} />
+          <Button 
+            title="Atualizar" 
+            mt={4} 
+            onPress={handleSubmit(handleUpdateUser)} 
+            isDisabled={isSubmitting} 
+          />
         </VStack>
       </ScrollView>
     </VStack>
