@@ -24,7 +24,7 @@ export async function createExercise({
     const exerciseExists = await getExerciseByName(name)
 
     if (exerciseExists) {
-      return new Error('teste')
+      return new Error('Exercicio já existe')
     }
 
     const prevExerciseList = await listExercises()

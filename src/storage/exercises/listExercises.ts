@@ -9,7 +9,7 @@ export async function listExercises() {
 
     const exercises: Exercise[] = storage ? JSON.parse(storage) : []
 
-    return []
+    return exercises
 
   } catch (err) {
     console.log(err);
