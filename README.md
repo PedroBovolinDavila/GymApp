@@ -8,8 +8,6 @@
 
 <h2>🧐 Features</h2>
 
-Here're some of the project's best features:
-
 - User login
 - Create a training
 - Create an exercise
@@ -22,25 +20,25 @@ Here're some of the project's best features:
 
 <h2>🛠️ Installation Steps:</h2>
 
-<p>1. Clone the project</p>
+<p id="step">1. Clone the project</p>
 
 ```
 git clone https://github.com/PedroBovolinDavila/GymApp.git
 ```
 
-<p>2. Enter the project folder</p>
+<p id="step">2. Enter the project folder</p>
 
 ```
 cd gymapp
 ```
 
-<p>3. Install the dependencies</p>
+<p id="step">3. Install the dependencies</p>
 
 ```
 npm i
 ```
 
-<p>4. Run the project</p>
+<p id="step">4. Run the project</p>
 
 ```
 npm run start
@@ -49,8 +47,6 @@ npm run start
 <br>
 
 <h2>💻 Built with</h2>
-
-Technologies used in the project:
 
 - React Native
 - Expo
@@ -64,4 +60,4 @@ Technologies used in the project:
 
 <br>
 
-Made by: Pedro Bovolin
+<p id="author">Made by: Pedro Bovolin</p>
