@@ -2,7 +2,7 @@
 
 <p id="description" align="center">This project is my version of a project developed in the Ignite course. I added some more features besides the AsyncStorage storage</p>
 
-<p align="center"><img src="https://img.shields.io/github/languages/top/pedrobovolindavila/gymapp?style=for-the-badge" alt="shields"><img src="https://img.shields.io/github/last-commit/pedrobovolindavila/gymapp?style=for-the-badge" alt="shields"></p>
+<div align="center"><img src="https://img.shields.io/github/languages/top/pedrobovolindavila/gymapp?style=for-the-badge" alt="shields"><img src="https://img.shields.io/github/last-commit/pedrobovolindavila/gymapp?style=for-the-badge" alt="shields"></div>
 
 <br>
 
